@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.example.readingapp.model.Account;
+
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
@@ -17,11 +19,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String TABLE_ACCOUNTS = "Accounts";
     public static final String COLUMN_ID = "id";
     public static final String COLUMN_USERNAME = "username";
+    public static final String COLUMN_EMAIL = "email";
     public static final String COLUMN_PASSWORD = "password";
-
     public static final String COLUMN_DOB = "dob";
-    public static final String COLUMN_GENDER = "gender";
-    public static final String COLUMN_TYPE = "type";  // 1 = Normal, 2 = Premium, 3 = Admin
+    public static final String COLUMN_GENDER = "gender"; // 1 = male, 0 = female
+    public static final String COLUMN_TYPE = "type"; // 1 = Normal, 2 = Premium, 3 = Admin
 
     // Table: Books
     public static final String TABLE_BOOKS = "Books";
@@ -57,6 +59,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE " + TABLE_ACCOUNTS + " (" +
                 COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COLUMN_USERNAME + " TEXT UNIQUE NOT NULL, " +
+                COLUMN_EMAIL + " TEXT UNIQUE NOT NULL, " +
                 COLUMN_PASSWORD + " TEXT NOT NULL, " +
                 COLUMN_DOB + " TEXT NOT NULL, " +
                 COLUMN_GENDER + " BOOLEAN NOT NULL, " +
@@ -104,17 +107,42 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     // Insert an Account
-    public boolean insertAccount(String username, String password, String name, String dob, boolean gender, int type) {
+    public boolean insertAccount(Account account) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(COLUMN_USERNAME, username);
-        values.put(COLUMN_DOB, dob);
-        values.put(COLUMN_GENDER, gender ? 1 : 0);
-        values.put(COLUMN_TYPE, type);
+        values.put(COLUMN_USERNAME, account.getUsername());
+        values.put(COLUMN_EMAIL, account.getEmail());
+        values.put(COLUMN_PASSWORD, account.getPassword());
+        values.put(COLUMN_DOB, account.getDob());
+        values.put(COLUMN_GENDER, account.isGender() ? 1 : 0);
+        values.put(COLUMN_TYPE, account.getType());
 
         long result = db.insert(TABLE_ACCOUNTS, null, values);
         return result != -1;
     }
+
+    // Update an Account
+    public boolean updateAccount(Account account) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_USERNAME, account.getUsername());
+        values.put(COLUMN_EMAIL, account.getEmail());
+        values.put(COLUMN_PASSWORD, account.getPassword());
+        values.put(COLUMN_DOB, account.getDob());
+        values.put(COLUMN_GENDER, account.isGender() ? 1 : 0);
+        values.put(COLUMN_TYPE, account.getType());
+
+        int rowsAffected = db.update(TABLE_ACCOUNTS, values, COLUMN_ID + " = ?", new String[]{String.valueOf(account.getId())});
+        return rowsAffected > 0;
+    }
+
+    // Delete an Account
+    public boolean deleteAccount(int accountId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        int rowsDeleted = db.delete(TABLE_ACCOUNTS, COLUMN_ID + " = ?", new String[]{String.valueOf(accountId)});
+        return rowsDeleted > 0;
+    }
+
 
     // Insert a Book
     public boolean insertBook(String title, String author, String description, int genreId) {
@@ -175,5 +203,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         cursor.close();
     }
+    public boolean isUsernameExists(String username) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT 1 FROM Accounts WHERE username = ?", new String[]{username});
+        boolean exists = cursor.moveToFirst();
+        cursor.close();
+        return exists;
+    }
+
+    public boolean isEmailExists(String email) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT 1 FROM Accounts WHERE email = ?", new String[]{email});
+        boolean exists = cursor.moveToFirst();
+        cursor.close();
+        return exists;
+    }
+
 }
 
