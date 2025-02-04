@@ -1,9 +1,156 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Register">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <!-- Centered Label -->
+    <TextView
+        android:id="@+id/TwLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
+        android:text="Đăng ký"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <!-- Email -->
+    <TextView
+        android:id="@+id/TwEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/TwLabel"
+        android:layout_marginTop="20dp"
+        android:text="Email" />
+
+    <EditText
+        android:id="@+id/EdtEmail"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_toEndOf="@id/TwEmail"
+        android:layout_alignBaseline="@id/TwEmail"
+        android:layout_marginStart="20dp"
+        android:ems="10"
+        android:inputType="textEmailAddress" />
+
+    <!-- Username -->
+    <TextView
+        android:id="@+id/TwName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/EdtEmail"
+        android:layout_marginTop="20dp"
+        android:paddingTop="20dp"
+        android:text="Tên đăng nhập" />
+
+    <EditText
+        android:id="@+id/EdtName"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_toEndOf="@id/TwName"
+        android:layout_alignBaseline="@id/TwName"
+        android:layout_marginStart="20dp"
+        android:ems="10"
+        android:inputType="textPersonName" />
+
+    <!-- Password -->
+    <TextView
+        android:id="@+id/TwPass"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/TwName"
+        android:layout_marginTop="20dp"
+        android:text="Mật khẩu" />
+
+    <EditText
+        android:id="@+id/EdtPass"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_toEndOf="@id/TwPass"
+        android:layout_alignBaseline="@id/TwPass"
+        android:layout_marginStart="20dp"
+        android:ems="10"
+        android:inputType="textPassword" />
+
+    <!-- Confirm Password -->
+    <TextView
+        android:id="@+id/TwRePass"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/TwPass"
+        android:layout_marginTop="20dp"
+        android:text="Xác nhận mật khẩu" />
+
+    <EditText
+        android:id="@+id/EdtRePass"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_toEndOf="@id/TwRePass"
+        android:layout_alignBaseline="@id/TwRePass"
+        android:layout_marginStart="20dp"
+        android:ems="10"
+        android:inputType="textPassword" />
+
+    <!-- Date of Birth -->
+    <TextView
+        android:id="@+id/TwDOB"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/TwRePass"
+        android:layout_marginTop="20dp"
+        android:text="Ngày sinh" />
+
+    <EditText
+        android:id="@+id/EdtDOB"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_toEndOf="@id/TwDOB"
+        android:layout_alignBaseline="@id/TwDOB"
+        android:layout_marginStart="20dp"
+        android:ems="10"
+        android:inputType="date" />
+
+    <!-- Gender -->
+    <TextView
+        android:id="@+id/TwGender"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/EdtDOB"
+        android:layout_marginTop="20dp"
+        android:text="Giới tính" />
+
+    <RadioGroup
+        android:id="@+id/GroupGender"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/TwGender"
+        android:layout_alignBaseline="@id/TwGender"
+        android:layout_marginStart="20dp"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/BtnNam"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nam" />
+
+        <RadioButton
+            android:id="@+id/BtnNu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nữ" />
+    </RadioGroup>
+
+    <!-- Register Button -->
+    <Button
+        android:id="@+id/BtnRegi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/GroupGender"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="100dp"
+        android:text="Đăng ký" />
+</RelativeLayout>
