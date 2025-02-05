@@ -1,88 +1,96 @@
-<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FAF3E0"
     tools:context=".LogIn">
 
-    <!-- Layer 1: Welcome TextView -->
-    <TextView
-        android:id="@+id/Tw_Welcome"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Đăng nhập"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"/>
+    <!-- Container with rounded white background -->
+    <RelativeLayout
+        android:id="@+id/Container"
+        android:layout_width="340dp"
+        android:layout_height="500dp"
+        android:layout_centerInParent="true"
+        android:background="#FFFFFF"
+        android:elevation="12dp"
+        android:padding="24dp"
+        android:layout_margin="20dp"
+        android:clipToOutline="true">
 
-    <!-- Layer 2: Username TextView & EditText -->
-    <TextView
-        android:id="@+id/Tw_Username"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Tên tài khoản"
-        android:layout_below="@id/Tw_Welcome"
-        android:layout_marginTop="75dp"
-        android:layout_alignParentStart="true"/>
-
-    <EditText
-        android:id="@+id/Edt_Username"
-        android:layout_width="200dp"
-        android:layout_height="48dp"
-        android:hint="Enter username"
-        android:autofillHints="username"
-        android:inputType="textPersonName"
-        android:layout_below="@id/Tw_Welcome"
-        android:layout_marginTop="60dp"
-        android:layout_toEndOf="@id/Tw_Username"
-        android:layout_marginStart="30dp"/>
-
-    <!-- Layer 3: Password TextView & EditText -->
-    <TextView
-        android:id="@+id/Tw_Password"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Mật khẩu"
-        android:layout_below="@id/Tw_Username"
-        android:layout_marginTop="75dp"
-        android:layout_alignParentStart="true"/>
-
-    <EditText
-        android:id="@+id/Edt_Password"
-        android:layout_width="200dp"
-        android:layout_height="48dp"
-        android:hint="Enter password"
-        android:autofillHints="password"
-        android:inputType="textPassword"
-        android:layout_below="@id/Tw_Username"
-        android:layout_marginTop="60dp"
-        android:layout_toEndOf="@id/Tw_Password"
-        android:layout_marginStart="30dp"/>
-
-    <!-- Layer 4: Login & Register Buttons -->
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/Edt_Password"
-        android:layout_marginTop="30dp"
-        android:layout_centerHorizontal="true"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/Btn_Login"
+        <!-- Welcome Text -->
+        <TextView
+            android:id="@+id/Tw_Welcome"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Đăng nhập"
-            android:layout_marginEnd="5dp"/>
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:textColor="#5D4037"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"/>
 
+        <EditText
+            android:id="@+id/Edt_Username"
+            android:layout_width="280dp"
+            android:layout_height="50dp"
+            android:hint="Tên tài khoản"
+            android:textColor="#5D4037"
+            android:background="#F5F5F5"
+            android:padding="12dp"
+            android:layout_below="@id/Tw_Welcome"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="30dp"/>
+
+        <!-- Password Input -->
+        <EditText
+            android:id="@+id/Edt_Password"
+            android:layout_width="280dp"
+            android:layout_height="50dp"
+            android:hint="Mật khẩu"
+            android:textColor="#5D4037"
+            android:background="#F5F5F5"
+            android:padding="12dp"
+            android:layout_below="@id/Edt_Username"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"/>
+
+        <!-- Register Button -->
         <Button
             android:id="@+id/Btn_Register"
+            android:layout_width="140dp"
+            android:layout_height="55dp"
+            android:text="Đăng ký"
+            android:textSize="16sp"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#8D6E63"
+            android:layout_below="@id/Edt_Password"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="30dp"/>
+
+        <!-- Login Button -->
+        <Button
+            android:id="@+id/Btn_Login"
+            android:layout_width="140dp"
+            android:layout_height="55dp"
+            android:text="Đăng nhập"
+            android:textSize="16sp"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#6D4C41"
+            android:layout_below="@id/Edt_Password"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="30dp"/>
+
+        <!-- Forgot Password -->
+        <TextView
+            android:id="@+id/Tw_Forgot"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Đăng ký"
-            android:layout_marginStart="5dp"/>
-    </LinearLayout>
-
+            android:text="Quên mật khẩu?"
+            android:textSize="14sp"
+            android:textColor="#795548"
+            android:layout_below="@id/Btn_Login"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"/>
+    </RelativeLayout>
 </RelativeLayout>

@@ -25,13 +25,13 @@ public class Register extends AppCompatActivity {
 
         dbHelper = new DatabaseHelper(this);
 
-        edtEmail = findViewById(R.id.EdtEmail);
-        edtName = findViewById(R.id.EdtName);
-        edtPass = findViewById(R.id.EdtPass);
-        edtRePass = findViewById(R.id.EdtRePass);
-        edtDOB = findViewById(R.id.EdtDOB);
+        edtEmail = findViewById(R.id.Edt_Email);
+        edtName = findViewById(R.id.Edt_Username);
+        edtPass = findViewById(R.id.Edt_Password);
+        edtRePass = findViewById(R.id.Edt_RePassword);
+        edtDOB = findViewById(R.id.Edt_DOB);
         groupGender = findViewById(R.id.GroupGender);
-        btnRegister = findViewById(R.id.BtnRegi);
+        btnRegister = findViewById(R.id.Btn_Register);
 
         btnRegister.setOnClickListener(v -> registerUser());
     }
@@ -43,7 +43,7 @@ public class Register extends AppCompatActivity {
         String confirmPassword = edtRePass.getText().toString();
         String dob = edtDOB.getText().toString().trim();
         int selectedGenderId = groupGender.getCheckedRadioButtonId();
-        boolean gender = selectedGenderId == R.id.BtnNam; // true for Nam, false for Nữ
+        boolean gender = selectedGenderId == R.id.Btn_Nam; // true for Nam, false for Nữ
         int type = 1; // Always 1
 
         // Validation Checks
