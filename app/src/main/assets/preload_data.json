@@ -1,0 +1,164 @@
+{
+  "accounts": [
+    {
+      "username": "admin",
+      "email": "admin@example.com",
+      "password": "admin123",
+      "dob": "1990-01-01",
+      "gender": true,
+      "type": 3
+    },
+    {
+      "username": "user1",
+      "email": "user1@example.com",
+      "password": "password123",
+      "dob": "1995-05-15",
+      "gender": true,
+      "type": 1
+    },
+    {
+      "username": "user2",
+      "email": "user2@example.com",
+      "password": "password123",
+      "dob": "2000-05-15",
+      "gender": false,
+      "type": 2
+    }
+  ],
+  "genres": [
+    { "name": "Fiction", "total_books": 0 },
+    { "name": "Non-Fiction", "total_books": 0 },
+    { "name": "Sci-Fi", "total_books": 0 },
+    { "name": "Fantasy", "total_books": 0 },
+    { "name": "Horror", "total_books": 0 },
+    { "name": "Collection", "total_books": 0 }
+  ],
+  "books": [
+    {
+      "title": "Tenth author journal 2A: World-ending Utopia",
+      "author": "Wilhelm Duy",
+      "description": "First part of the second edition",
+      "image_link": "assets/books/book1.png",
+      "genre_id": 4
+    },
+    {
+      "title": "Tenth author journal 2B: Broken Marionette",
+      "author": "Wilhelm Duy",
+      "description": "Second part of the edition",
+      "image_link": "assets/books/book2.png",
+      "genre_id": 4
+    }
+  ],
+  "chapters": [
+    {
+      "chapter_name": "1_Escape the cage",
+      "book_id": 1,
+      "link" : "assets/chapters/1_Escape the cage.docx"
+    },
+    {
+      "chapter_name": "2_Open Blinded Eyes",
+      "book_id": 1,
+      "link" : "assets/chapters/2_Open blinded eyes.docx"
+    },
+    {
+      "chapter_name": "3_Shivering truth",
+      "book_id": 1,
+      "link" : "assets/chapters/3_Shivering truth.docx"
+    },
+    {
+      "chapter_name": "4_Stolen away",
+      "book_id": 1,
+      "link" : "assets/chapters/4_Stolen away.docx"
+    },
+    {
+      "chapter_name": "5_Scholar’s revision",
+      "book_id": 1,
+      "link" : "assets/chapters/5_Scholar_s revision.docx"
+    },
+    {
+      "chapter_name": "6_From the depth of hell",
+      "book_id": 1,
+      "link" : "assets/chapters/6_From the depth of hell.docx"
+    },
+    {
+      "chapter_name": "7_Staggering dissociation",
+      "book_id": 1,
+      "link" : "assets/chapters/7_Staggering dissociation.docx"
+    },
+    {
+      "chapter_name": "8_Uncanny resemble",
+      "book_id": 1,
+      "link" : "assets/chapters/8_Uncanny resemble.docx"
+    },
+    {
+      "chapter_name": "9_Uneventful meeting",
+      "book_id": 1,
+      "link" : "assets/chapters/9_Uneventful meeting.docx"
+    },
+    {
+      "chapter_name": "10_Land of lost lust",
+      "book_id": 1,
+      "link" : "assets/chapters/10_Land of lost lust.docx"
+    },
+    {
+      "chapter_name": "1_First step of denial",
+      "book_id": 2,
+      "link" : "assets/chapters/1_First step of Denial.docx"
+    },
+    {
+      "chapter_name": "2_Second step of vacillation",
+      "book_id": 2,
+      "link" : "assets/chapters/2_Second step of vacillation.docx"
+    },
+    {
+      "chapter_name": "3_Final step of isolation",
+      "book_id": 2,
+      "link" : "assets/chapters/3_Final step of isolation.docx"
+    },
+    {
+      "chapter_name": "4_Ambigious decipher",
+      "book_id": 2,
+      "link" : "assets/chapters/4_Ambigious decipher.docx"
+    },
+    {
+      "chapter_name": "5_Chain of self-denial",
+      "book_id": 2,
+      "link" : "assets/chapters/5_Chain of self-denial.docx"
+    },
+    {
+      "chapter_name": "6_Human Patriachry",
+      "book_id": 2,
+      "link" : "assets/chapters/6_Human Patriachry.docx"
+    },
+    {
+      "chapter_name": "7_Temporial formality",
+      "book_id": 2,
+      "link" : "assets/chapters/7_Temporial formality.docx"
+    },
+    {
+      "chapter_name": "8_Blanket sovereign",
+      "book_id": 2,
+      "link" : "assets/chapters/8_Blanket sovereign.docx"
+    },
+    {
+      "chapter_name": "9_Senseless challange",
+      "book_id": 2,
+      "link" : "assets/chapters/9_Senseless challange.docx"
+    },
+    {
+      "chapter_name": "10_Lonesome Dreamer",
+      "book_id": 2,
+      "link" : "assets/chapters/10_Lonesome Dreamer.docx"
+    }
+  ],
+  "favorites": [
+    {
+      "account_id": 2,
+      "book_id": 1
+    },
+    {
+      "account_id": 3,
+      "book_id": 2
+    }
+  ]
+}

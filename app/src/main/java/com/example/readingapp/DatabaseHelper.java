@@ -9,53 +9,64 @@ import android.util.Log;
 
 import com.example.readingapp.model.Account;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "ReadingApp.db";
-    private static final int DATABASE_VERSION = 2;  // Increment version when modifying schema
+    private static final int DATABASE_VERSION = 2;
+    private final Context context;
 
-    // Table: Accounts
-    public static final String TABLE_ACCOUNTS = "Accounts";
-    public static final String COLUMN_ID = "id";
-    public static final String COLUMN_USERNAME = "username";
-    public static final String COLUMN_EMAIL = "email";
-    public static final String COLUMN_PASSWORD = "password";
-    public static final String COLUMN_DOB = "dob";
-    public static final String COLUMN_GENDER = "gender"; // 1 = male, 0 = female
-    public static final String COLUMN_TYPE = "type"; // 1 = Normal, 2 = Premium, 3 = Admin
+    // Table Names
+    private static final String TABLE_ACCOUNTS = "Accounts";
+    private static final String TABLE_BOOKS = "Books";
+    private static final String TABLE_GENRES = "Genres";
+    private static final String TABLE_FAVORITES = "Favorites";
+    private static final String TABLE_CHAPTERS = "Chapters";
 
-    // Table: Books
-    public static final String TABLE_BOOKS = "Books";
-    public static final String COLUMN_BOOK_ID = "id";
-    public static final String COLUMN_TITLE = "title";
-    public static final String COLUMN_AUTHOR = "author";
-    public static final String COLUMN_DESCRIPTION = "description";
-    public static final String COLUMN_GENRE_ID = "genre_id";
+    // Common Columns
+    private static final String COLUMN_ID = "id";
 
-    // Table: Genres
-    public static final String TABLE_GENRES = "Genres";
-    public static final String COLUMN_GENRE_NAME = "name";
-    public static final String COLUMN_TOTAL_BOOKS = "total_books";
+    // Accounts Table Columns
+    private static final String COLUMN_USERNAME = "username";
+    private static final String COLUMN_EMAIL = "email";
+    private static final String COLUMN_PASSWORD = "password";
+    private static final String COLUMN_DOB = "dob";
+    private static final String COLUMN_GENDER = "gender"; // 1 = male, 0 = female
+    private static final String COLUMN_TYPE = "type"; // 1 = Normal, 2 = Premium, 3 = Admin
 
-    // Table: Favorites
-    public static final String TABLE_FAVORITES = "Favorites";
-    public static final String COLUMN_ACCOUNT_ID = "account_id";
-    public static final String COLUMN_BOOK_IDF_FK = "book_id";
+    // Books Table Columns
+    private static final String COLUMN_TITLE = "title";
+    private static final String COLUMN_AUTHOR = "author";
+    private static final String COLUMN_DESCRIPTION = "description";
+    private static final String COLUMN_GENRE_ID = "genre_id";
 
-    // Table: Chapters
-    public static final String TABLE_CHAPTERS = "Chapters";
-    public static final String COLUMN_CHAPTER_ID = "id";
-    public static final String COLUMN_CHAPTER_NAME = "chapter_name";
-    public static final String COLUMN_BOOK_IDC_FK = "book_id"; // Foreign key referencing Books table
+    // Genres Table Columns
+    private static final String COLUMN_GENRE_NAME = "name";
+    private static final String COLUMN_TOTAL_BOOKS = "total_books";
+
+    // Favorites Table Columns
+    private static final String COLUMN_ACCOUNT_ID = "account_id";
+    private static final String COLUMN_BOOK_ID = "book_id";
+
+    // Chapters Table Columns
+    private static final String COLUMN_CHAPTER_NAME = "chapter_name";
+    private static final String COLUMN_BOOK_IDC_FK = "book_id";
+    private static final String COLUMN_LINK = "link";
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        this.context = context;
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        // Create Accounts table
         db.execSQL("CREATE TABLE " + TABLE_ACCOUNTS + " (" +
                 COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COLUMN_USERNAME + " TEXT UNIQUE NOT NULL, " +
@@ -65,35 +76,34 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 COLUMN_GENDER + " BOOLEAN NOT NULL, " +
                 COLUMN_TYPE + " INTEGER NOT NULL);");
 
-        // Create Books table
+        db.execSQL("CREATE TABLE " + TABLE_GENRES + " (" +
+                COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                COLUMN_GENRE_NAME + " TEXT NOT NULL, " +
+                COLUMN_TOTAL_BOOKS + " INTEGER NOT NULL);");
+
         db.execSQL("CREATE TABLE " + TABLE_BOOKS + " (" +
-                COLUMN_BOOK_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COLUMN_TITLE + " TEXT NOT NULL, " +
                 COLUMN_AUTHOR + " TEXT NOT NULL, " +
                 COLUMN_DESCRIPTION + " TEXT NOT NULL, " +
                 COLUMN_GENRE_ID + " INTEGER, " +
                 "FOREIGN KEY(" + COLUMN_GENRE_ID + ") REFERENCES " + TABLE_GENRES + "(" + COLUMN_ID + "));");
 
-        // Create Genres table
-        db.execSQL("CREATE TABLE " + TABLE_GENRES + " (" +
-                COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                COLUMN_GENRE_NAME + " TEXT NOT NULL, " +
-                COLUMN_TOTAL_BOOKS + " INTEGER NOT NULL);");
-
-        // Create Favorites table
         db.execSQL("CREATE TABLE " + TABLE_FAVORITES + " (" +
                 COLUMN_ACCOUNT_ID + " INTEGER, " +
-                COLUMN_BOOK_IDF_FK + " INTEGER, " +
-                "PRIMARY KEY(" + COLUMN_ACCOUNT_ID + ", " + COLUMN_BOOK_IDF_FK + "), " +
+                COLUMN_BOOK_ID + " INTEGER, " +
+                "PRIMARY KEY(" + COLUMN_ACCOUNT_ID + ", " + COLUMN_BOOK_ID + "), " +
                 "FOREIGN KEY(" + COLUMN_ACCOUNT_ID + ") REFERENCES " + TABLE_ACCOUNTS + "(" + COLUMN_ID + "), " +
-                "FOREIGN KEY(" + COLUMN_BOOK_IDF_FK + ") REFERENCES " + TABLE_BOOKS + "(" + COLUMN_BOOK_ID + "));");
+                "FOREIGN KEY(" + COLUMN_BOOK_ID + ") REFERENCES " + TABLE_BOOKS + "(" + COLUMN_ID + "));");
 
-        // Create Chapters table
         db.execSQL("CREATE TABLE " + TABLE_CHAPTERS + " (" +
-                COLUMN_CHAPTER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COLUMN_CHAPTER_NAME + " TEXT NOT NULL, " +
                 COLUMN_BOOK_IDC_FK + " INTEGER, " +
-                "FOREIGN KEY(" + COLUMN_BOOK_IDC_FK + ") REFERENCES " + TABLE_BOOKS + "(" + COLUMN_BOOK_ID + "));");
+                COLUMN_LINK + " TEXT NOT NULL, " +
+                "FOREIGN KEY(" + COLUMN_BOOK_IDC_FK + ") REFERENCES " + TABLE_BOOKS + "(" + COLUMN_ID + "));");
+
+        preloadData(db);
     }
 
     @Override
@@ -105,6 +115,44 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_ACCOUNTS);
         onCreate(db);
     }
+
+    private void preloadData(SQLiteDatabase db) {
+        String jsonString = loadJSONFromAsset("preload_data.json");
+        if (jsonString == null) {
+            Log.e("DatabaseHelper", "Failed to load JSON");
+            return;
+        }
+        try {
+            JSONObject jsonObject = new JSONObject(jsonString);
+            JSONArray accountsArray = jsonObject.getJSONArray("accounts");
+            for (int i = 0; i < accountsArray.length(); i++) {
+                JSONObject account = accountsArray.getJSONObject(i);
+                ContentValues values = new ContentValues();
+                values.put(COLUMN_USERNAME, account.getString("username"));
+                values.put(COLUMN_EMAIL, account.getString("email"));
+                values.put(COLUMN_PASSWORD, account.getString("password"));
+                values.put(COLUMN_DOB, account.getString("dob"));
+                values.put(COLUMN_GENDER, account.getBoolean("gender") ? 1 : 0);
+                values.put(COLUMN_TYPE, account.getInt("type"));
+                db.insert(TABLE_ACCOUNTS, null, values);
+            }
+        } catch (JSONException e) {
+            Log.e("DatabaseHelper", "JSON Parsing Error: " + e.getMessage());
+        }
+    }
+
+    private String loadJSONFromAsset(String fileName) {
+        try (InputStream is = context.getAssets().open(fileName)) {
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            return new String(buffer, StandardCharsets.UTF_8);
+        } catch (IOException ex) {
+            Log.e("DatabaseHelper", "Error reading JSON file", ex);
+            return null;
+        }
+    }
+
 
     // Insert an Account
     public boolean insertAccount(Account account) {
@@ -210,7 +258,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cursor.close();
         return exists;
     }
-
     public boolean isEmailExists(String email) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT 1 FROM Accounts WHERE email = ?", new String[]{email});
@@ -218,6 +265,5 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cursor.close();
         return exists;
     }
-
 }
 
