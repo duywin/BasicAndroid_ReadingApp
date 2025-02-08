@@ -45,6 +45,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String COLUMN_TITLE = "title";
     private static final String COLUMN_AUTHOR = "author";
     private static final String COLUMN_DESCRIPTION = "description";
+    
+    private static final String COLUMN_IMAGE_LINK = "imageLink";
     private static final String COLUMN_GENRE_ID = "genre_id";
 
     // Genres Table Columns
@@ -85,7 +87,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COLUMN_TITLE + " TEXT NOT NULL, " +
                 COLUMN_AUTHOR + " TEXT NOT NULL, " +
-                COLUMN_DESCRIPTION + " TEXT NOT NULL, " +
+                COLUMN_DESCRIPTION + " TEXT NOT NULL, " + 
+                COLUMN_IMAGE_LINK + " TEXT NOT NULL, " +
                 COLUMN_GENRE_ID + " INTEGER, " +
                 "FOREIGN KEY(" + COLUMN_GENRE_ID + ") REFERENCES " + TABLE_GENRES + "(" + COLUMN_ID + "));");
 
@@ -106,16 +109,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         preloadData(db);
     }
 
-    @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_FAVORITES);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_CHAPTERS);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_BOOKS);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_GENRES);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_ACCOUNTS);
-        onCreate(db);
-    }
-
     private void preloadData(SQLiteDatabase db) {
         String jsonString = loadJSONFromAsset("preload_data.json");
         if (jsonString == null) {
@@ -124,6 +117,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         try {
             JSONObject jsonObject = new JSONObject(jsonString);
+
+            // Insert Accounts
             JSONArray accountsArray = jsonObject.getJSONArray("accounts");
             for (int i = 0; i < accountsArray.length(); i++) {
                 JSONObject account = accountsArray.getJSONObject(i);
@@ -136,10 +131,58 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 values.put(COLUMN_TYPE, account.getInt("type"));
                 db.insert(TABLE_ACCOUNTS, null, values);
             }
+
+            // Insert Genres
+            JSONArray genresArray = jsonObject.getJSONArray("genres");
+            for (int i = 0; i < genresArray.length(); i++) {
+                JSONObject genre = genresArray.getJSONObject(i);
+                ContentValues values = new ContentValues();
+                values.put(COLUMN_GENRE_NAME, genre.getString("name"));
+                values.put(COLUMN_TOTAL_BOOKS, genre.getInt("total_books"));
+                db.insert(TABLE_GENRES, null, values);
+            }
+
+            // Insert Books
+            JSONArray booksArray = jsonObject.getJSONArray("books");
+            for (int i = 0; i < booksArray.length(); i++) {
+                JSONObject book = booksArray.getJSONObject(i);
+                ContentValues values = new ContentValues();
+                values.put(COLUMN_TITLE, book.getString("title"));
+                values.put(COLUMN_AUTHOR, book.getString("author"));
+                values.put(COLUMN_DESCRIPTION, book.getString("description"));
+                values.put(COLUMN_IMAGE_LINK, book.getString("imageLink"));
+                values.put(COLUMN_GENRE_ID, book.getInt("genre_id"));
+                db.insert(TABLE_BOOKS, null, values);
+            }
+
+            // Insert Chapters
+            JSONArray chaptersArray = jsonObject.getJSONArray("chapters");
+            for (int i = 0; i < chaptersArray.length(); i++) {
+                JSONObject chapter = chaptersArray.getJSONObject(i);
+                ContentValues values = new ContentValues();
+                values.put(COLUMN_CHAPTER_NAME, chapter.getString("chapter_name"));
+                values.put(COLUMN_BOOK_IDC_FK, chapter.getInt("book_id"));
+                values.put(COLUMN_LINK, chapter.getString("link"));
+                db.insert(TABLE_CHAPTERS, null, values);
+            }
+
+            // Insert Favorites
+            JSONArray favoritesArray = jsonObject.getJSONArray("favorites");
+            for (int i = 0; i < favoritesArray.length(); i++) {
+                JSONObject favorite = favoritesArray.getJSONObject(i);
+                ContentValues values = new ContentValues();
+                values.put(COLUMN_ACCOUNT_ID, favorite.getInt("account_id"));
+                values.put(COLUMN_BOOK_ID, favorite.getInt("book_id"));
+                db.insert(TABLE_FAVORITES, null, values);
+            }
+
+            Log.d("DatabaseHelper", "Preloaded data successfully.");
+
         } catch (JSONException e) {
             Log.e("DatabaseHelper", "JSON Parsing Error: " + e.getMessage());
         }
     }
+
 
     private String loadJSONFromAsset(String fileName) {
         try (InputStream is = context.getAssets().open(fileName)) {
@@ -152,6 +195,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             return null;
         }
     }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_FAVORITES);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_CHAPTERS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_BOOKS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_GENRES);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_ACCOUNTS);
+        onCreate(db);
+    }
+
+
 
 
     // Insert an Account
