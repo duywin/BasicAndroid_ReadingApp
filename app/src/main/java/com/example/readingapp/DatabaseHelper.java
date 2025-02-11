@@ -115,6 +115,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             Log.e("DatabaseHelper", "Failed to load JSON");
             return;
         }
+
+        db.beginTransaction(); // Start transaction
         try {
             JSONObject jsonObject = new JSONObject(jsonString);
 
@@ -129,7 +131,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 values.put(COLUMN_DOB, account.getString("dob"));
                 values.put(COLUMN_GENDER, account.getBoolean("gender") ? 1 : 0);
                 values.put(COLUMN_TYPE, account.getInt("type"));
-                db.insert(TABLE_ACCOUNTS, null, values);
+                long result = db.insert(TABLE_ACCOUNTS, null, values);
+                Log.d("DatabaseHelper", "Inserted account: " + account.getString("username") + " - Result: " + result);
             }
 
             // Insert Genres
@@ -139,7 +142,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 ContentValues values = new ContentValues();
                 values.put(COLUMN_GENRE_NAME, genre.getString("name"));
                 values.put(COLUMN_TOTAL_BOOKS, genre.getInt("total_books"));
-                db.insert(TABLE_GENRES, null, values);
+                long result = db.insert(TABLE_GENRES, null, values);
+                Log.d("DatabaseHelper", "Inserted genre: " + genre.getString("name") + " - Result: " + result);
             }
 
             // Insert Books
@@ -152,7 +156,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 values.put(COLUMN_DESCRIPTION, book.getString("description"));
                 values.put(COLUMN_IMAGE_LINK, book.getString("imageLink"));
                 values.put(COLUMN_GENRE_ID, book.getInt("genre_id"));
-                db.insert(TABLE_BOOKS, null, values);
+                long result = db.insert(TABLE_BOOKS, null, values);
+                Log.d("DatabaseHelper", "Inserted book: " + book.getString("title") + " - Result: " + result);
             }
 
             // Insert Chapters
@@ -163,7 +168,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 values.put(COLUMN_CHAPTER_NAME, chapter.getString("chapter_name"));
                 values.put(COLUMN_BOOK_IDC_FK, chapter.getInt("book_id"));
                 values.put(COLUMN_LINK, chapter.getString("link"));
-                db.insert(TABLE_CHAPTERS, null, values);
+                long result = db.insert(TABLE_CHAPTERS, null, values);
+                Log.d("DatabaseHelper", "Inserted chapter: " + chapter.getString("chapter_name") + " - Result: " + result);
             }
 
             // Insert Favorites
@@ -173,13 +179,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 ContentValues values = new ContentValues();
                 values.put(COLUMN_ACCOUNT_ID, favorite.getInt("account_id"));
                 values.put(COLUMN_BOOK_ID, favorite.getInt("book_id"));
-                db.insert(TABLE_FAVORITES, null, values);
+                long result = db.insert(TABLE_FAVORITES, null, values);
+                Log.d("DatabaseHelper", "Inserted favorite: Account " + favorite.getInt("account_id") + " Book " + favorite.getInt("book_id") + " - Result: " + result);
             }
 
-            Log.d("DatabaseHelper", "Preloaded data successfully.");
+            db.setTransactionSuccessful(); // Mark transaction as successful
+            Log.d("DatabaseHelper", "Preloaded all data successfully.");
 
         } catch (JSONException e) {
             Log.e("DatabaseHelper", "JSON Parsing Error: " + e.getMessage());
+        } finally {
+            db.endTransaction(); // End transaction
         }
     }
 
