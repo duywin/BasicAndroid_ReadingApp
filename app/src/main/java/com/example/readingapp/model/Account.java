@@ -2,15 +2,12 @@ package com.example.readingapp.model;
 
 public class Account {
     private int id;
-
-    private String email;
-    private String username;
-    private String password;
-    private String dob;
+    private String username, email, password, dob;
     private boolean gender; // true = male, false = female
-    private int type; // 1 = Normal User, 2 = Premium User, 3 = Admin
+    private int type; // 1 = Normal, 2 = Premium, 3 = Admin
 
-    public Account(int id, String username,String email, String password, String dob, boolean gender, int type) {
+    // Constructor for full account details
+    public Account(int id, String username, String email, String password, String dob, boolean gender, int type) {
         this.id = id;
         this.username = username;
         this.email = email;
@@ -20,10 +17,15 @@ public class Account {
         this.type = type;
     }
 
-    // Getters and Setters
+    // Constructor for login validation
+    public Account(int id, int type) {
+        this.id = id;
+        this.type = type;
+    }
+
+    // Getters
     public int getId() { return id; }
     public String getUsername() { return username; }
-
     public String getEmail() { return email; }
     public String getPassword() { return password; }
     public String getDob() { return dob; }
