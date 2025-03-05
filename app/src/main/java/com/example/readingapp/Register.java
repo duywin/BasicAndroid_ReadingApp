@@ -10,20 +10,21 @@ import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.example.readingapp.dao.AccountDAO;
 import com.example.readingapp.model.Account;
 
 public class Register extends AppCompatActivity {
     private EditText edtEmail, edtName, edtPass, edtRePass, edtDOB;
     private RadioGroup groupGender;
     private Button btnRegister;
-    private DatabaseHelper dbHelper;
+    private AccountDAO accountDAO;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        dbHelper = new DatabaseHelper(this);
+        accountDAO = new AccountDAO(this);
 
         edtEmail = findViewById(R.id.Edt_Email);
         edtName = findViewById(R.id.Edt_Username);
@@ -44,7 +45,7 @@ public class Register extends AppCompatActivity {
         String dob = edtDOB.getText().toString().trim();
         int selectedGenderId = groupGender.getCheckedRadioButtonId();
         boolean gender = selectedGenderId == R.id.Btn_Nam; // true for Nam, false for Nữ
-        int type = 1; // Always 1
+        int type = 1; // Always 1 (Normal User)
 
         // Validation Checks
         if (email.isEmpty() || username.isEmpty() || password.isEmpty() || confirmPassword.isEmpty() || dob.isEmpty() || selectedGenderId == -1) {
@@ -67,24 +68,24 @@ public class Register extends AppCompatActivity {
             return;
         }
 
-        if (dbHelper.isUsernameExists(username)) {
+        if (accountDAO.isUsernameExists(username)) {
             showToast("Tên đăng nhập đã tồn tại.");
             return;
         }
 
-        if (dbHelper.isEmailExists(email)) {
+        if (accountDAO.isEmailExists(email)) {
             showToast("Email đã tồn tại.");
             return;
         }
 
         // Insert account into database
-        Account newAccount = new Account(0, username, email, password, dob, gender, type);
-        if (dbHelper.insertAccount(newAccount)) {
+        Account newAccount = new Account(username, email, password, dob, gender, type);
+        if (accountDAO.insertAccount(newAccount)) {
             showToast("Đăng ký thành công!");
-            Intent intent = new Intent( Register.this, LogIn.class);
+            Intent intent = new Intent(Register.this, LogIn.class);
             startActivity(intent);
-        }
-        else {
+            finish();
+        } else {
             showToast("Đăng ký thất bại, thử lại.");
         }
     }

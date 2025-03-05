@@ -2,12 +2,11 @@ package com.example.readingapp;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import com.example.readingapp.model.Account;
+import com.example.readingapp.dao.*;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -16,51 +15,13 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.Iterator;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "ReadingApp.db";
     private static final int DATABASE_VERSION = 2;
     private final Context context;
-
-    // Table Names
-    private static final String TABLE_ACCOUNTS = "Accounts";
-    private static final String TABLE_BOOKS = "Books";
-    private static final String TABLE_GENRES = "Genres";
-    private static final String TABLE_FAVORITES = "Favorites";
-    private static final String TABLE_CHAPTERS = "Chapters";
-
-    // Common Columns
-    private static final String COLUMN_ID = "id";
-
-    // Accounts Table Columns
-    private static final String COLUMN_USERNAME = "username";
-    private static final String COLUMN_EMAIL = "email";
-    private static final String COLUMN_PASSWORD = "password";
-    private static final String COLUMN_DOB = "dob";
-    private static final String COLUMN_GENDER = "gender"; // 1 = male, 0 = female
-    private static final String COLUMN_TYPE = "type"; // 1 = Normal, 2 = Premium, 3 = Admin
-
-    // Books Table Columns
-    private static final String COLUMN_TITLE = "title";
-    private static final String COLUMN_AUTHOR = "author";
-    private static final String COLUMN_DESCRIPTION = "description";
-    
-    private static final String COLUMN_IMAGE_LINK = "imageLink";
-    private static final String COLUMN_GENRE_ID = "genre_id";
-
-    // Genres Table Columns
-    private static final String COLUMN_GENRE_NAME = "name";
-    private static final String COLUMN_TOTAL_BOOKS = "total_books";
-
-    // Favorites Table Columns
-    private static final String COLUMN_ACCOUNT_ID = "account_id";
-    private static final String COLUMN_BOOK_ID = "book_id";
-
-    // Chapters Table Columns
-    private static final String COLUMN_CHAPTER_NAME = "chapter_name";
-    private static final String COLUMN_BOOK_IDC_FK = "book_id";
-    private static final String COLUMN_LINK = "link";
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -69,42 +30,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("CREATE TABLE " + TABLE_ACCOUNTS + " (" +
-                COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                COLUMN_USERNAME + " TEXT UNIQUE NOT NULL, " +
-                COLUMN_EMAIL + " TEXT UNIQUE NOT NULL, " +
-                COLUMN_PASSWORD + " TEXT NOT NULL, " +
-                COLUMN_DOB + " TEXT NOT NULL, " +
-                COLUMN_GENDER + " BOOLEAN NOT NULL, " +
-                COLUMN_TYPE + " INTEGER NOT NULL);");
-
-        db.execSQL("CREATE TABLE " + TABLE_GENRES + " (" +
-                COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                COLUMN_GENRE_NAME + " TEXT NOT NULL, " +
-                COLUMN_TOTAL_BOOKS + " INTEGER NOT NULL);");
-
-        db.execSQL("CREATE TABLE " + TABLE_BOOKS + " (" +
-                COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                COLUMN_TITLE + " TEXT NOT NULL, " +
-                COLUMN_AUTHOR + " TEXT NOT NULL, " +
-                COLUMN_DESCRIPTION + " TEXT NOT NULL, " + 
-                COLUMN_IMAGE_LINK + " TEXT NOT NULL, " +
-                COLUMN_GENRE_ID + " INTEGER, " +
-                "FOREIGN KEY(" + COLUMN_GENRE_ID + ") REFERENCES " + TABLE_GENRES + "(" + COLUMN_ID + "));");
-
-        db.execSQL("CREATE TABLE " + TABLE_FAVORITES + " (" +
-                COLUMN_ACCOUNT_ID + " INTEGER, " +
-                COLUMN_BOOK_ID + " INTEGER, " +
-                "PRIMARY KEY(" + COLUMN_ACCOUNT_ID + ", " + COLUMN_BOOK_ID + "), " +
-                "FOREIGN KEY(" + COLUMN_ACCOUNT_ID + ") REFERENCES " + TABLE_ACCOUNTS + "(" + COLUMN_ID + "), " +
-                "FOREIGN KEY(" + COLUMN_BOOK_ID + ") REFERENCES " + TABLE_BOOKS + "(" + COLUMN_ID + "));");
-
-        db.execSQL("CREATE TABLE " + TABLE_CHAPTERS + " (" +
-                COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                COLUMN_CHAPTER_NAME + " TEXT NOT NULL, " +
-                COLUMN_BOOK_IDC_FK + " INTEGER, " +
-                COLUMN_LINK + " TEXT NOT NULL, " +
-                "FOREIGN KEY(" + COLUMN_BOOK_IDC_FK + ") REFERENCES " + TABLE_BOOKS + "(" + COLUMN_ID + "));");
+        db.execSQL(AccountDAO.CREATE_TABLE);
+        db.execSQL(GenreDAO.CREATE_TABLE);
+        db.execSQL(BookDAO.CREATE_TABLE);
+        db.execSQL(FavoriteDAO.CREATE_TABLE);
+        db.execSQL(ChapterDAO.CREATE_TABLE);
 
         preloadData(db);
     }
@@ -116,80 +46,38 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             return;
         }
 
-        db.beginTransaction(); // Start transaction
+        db.beginTransaction();
         try {
             JSONObject jsonObject = new JSONObject(jsonString);
 
-            // Insert Accounts
-            JSONArray accountsArray = jsonObject.getJSONArray("accounts");
-            for (int i = 0; i < accountsArray.length(); i++) {
-                JSONObject account = accountsArray.getJSONObject(i);
-                ContentValues values = new ContentValues();
-                values.put(COLUMN_USERNAME, account.getString("username"));
-                values.put(COLUMN_EMAIL, account.getString("email"));
-                values.put(COLUMN_PASSWORD, account.getString("password"));
-                values.put(COLUMN_DOB, account.getString("dob"));
-                values.put(COLUMN_GENDER, account.getBoolean("gender") ? 1 : 0);
-                values.put(COLUMN_TYPE, account.getInt("type"));
-                long result = db.insert(TABLE_ACCOUNTS, null, values);
-                Log.d("DatabaseHelper", "Inserted account: " + account.getString("username") + " - Result: " + result);
-            }
+            insertData(db, jsonObject.getJSONArray("accounts"), AccountDAO.TABLE_NAME);
+            insertData(db, jsonObject.getJSONArray("genres"), GenreDAO.TABLE_NAME);
+            insertData(db, jsonObject.getJSONArray("books"), BookDAO.TABLE_NAME);
+            insertData(db, jsonObject.getJSONArray("chapters"), ChapterDAO.TABLE_NAME);
+            insertData(db, jsonObject.getJSONArray("favorites"), FavoriteDAO.TABLE_NAME);
 
-            // Insert Genres
-            JSONArray genresArray = jsonObject.getJSONArray("genres");
-            for (int i = 0; i < genresArray.length(); i++) {
-                JSONObject genre = genresArray.getJSONObject(i);
-                ContentValues values = new ContentValues();
-                values.put(COLUMN_GENRE_NAME, genre.getString("name"));
-                values.put(COLUMN_TOTAL_BOOKS, genre.getInt("total_books"));
-                long result = db.insert(TABLE_GENRES, null, values);
-                Log.d("DatabaseHelper", "Inserted genre: " + genre.getString("name") + " - Result: " + result);
-            }
-
-            // Insert Books
-            JSONArray booksArray = jsonObject.getJSONArray("books");
-            for (int i = 0; i < booksArray.length(); i++) {
-                JSONObject book = booksArray.getJSONObject(i);
-                ContentValues values = new ContentValues();
-                values.put(COLUMN_TITLE, book.getString("title"));
-                values.put(COLUMN_AUTHOR, book.getString("author"));
-                values.put(COLUMN_DESCRIPTION, book.getString("description"));
-                values.put(COLUMN_IMAGE_LINK, book.getString("imageLink"));
-                values.put(COLUMN_GENRE_ID, book.getInt("genre_id"));
-                long result = db.insert(TABLE_BOOKS, null, values);
-                Log.d("DatabaseHelper", "Inserted book: " + book.getString("title") + " - Result: " + result);
-            }
-
-            // Insert Chapters
-            JSONArray chaptersArray = jsonObject.getJSONArray("chapters");
-            for (int i = 0; i < chaptersArray.length(); i++) {
-                JSONObject chapter = chaptersArray.getJSONObject(i);
-                ContentValues values = new ContentValues();
-                values.put(COLUMN_CHAPTER_NAME, chapter.getString("chapter_name"));
-                values.put(COLUMN_BOOK_IDC_FK, chapter.getInt("book_id"));
-                values.put(COLUMN_LINK, chapter.getString("link"));
-                long result = db.insert(TABLE_CHAPTERS, null, values);
-                Log.d("DatabaseHelper", "Inserted chapter: " + chapter.getString("chapter_name") + " - Result: " + result);
-            }
-
-            // Insert Favorites
-            JSONArray favoritesArray = jsonObject.getJSONArray("favorites");
-            for (int i = 0; i < favoritesArray.length(); i++) {
-                JSONObject favorite = favoritesArray.getJSONObject(i);
-                ContentValues values = new ContentValues();
-                values.put(COLUMN_ACCOUNT_ID, favorite.getInt("account_id"));
-                values.put(COLUMN_BOOK_ID, favorite.getInt("book_id"));
-                long result = db.insert(TABLE_FAVORITES, null, values);
-                Log.d("DatabaseHelper", "Inserted favorite: Account " + favorite.getInt("account_id") + " Book " + favorite.getInt("book_id") + " - Result: " + result);
-            }
-
-            db.setTransactionSuccessful(); // Mark transaction as successful
+            db.setTransactionSuccessful();
             Log.d("DatabaseHelper", "Preloaded all data successfully.");
-
         } catch (JSONException e) {
             Log.e("DatabaseHelper", "JSON Parsing Error: " + e.getMessage());
         } finally {
-            db.endTransaction(); // End transaction
+            db.endTransaction();
+        }
+    }
+
+    private void insertData(SQLiteDatabase db, JSONArray dataArray, String tableName) throws JSONException {
+        for (int i = 0; i < dataArray.length(); i++) {
+            JSONObject data = dataArray.getJSONObject(i);
+            ContentValues values = new ContentValues();
+
+            Iterator<String> keys = data.keys(); // Get keys iterator
+            while (keys.hasNext()) { // Iterate over keys
+                String key = keys.next();
+                values.put(key, data.get(key).toString());
+            }
+
+            db.insert(tableName, null, values);
+            Log.d("DatabaseHelper", "Inserted into " + tableName + ": " + values);
         }
     }
 
@@ -208,127 +96,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_FAVORITES);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_CHAPTERS);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_BOOKS);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_GENRES);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_ACCOUNTS);
+        db.execSQL("DROP TABLE IF EXISTS " + AccountDAO.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + GenreDAO.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + BookDAO.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + FavoriteDAO.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + ChapterDAO.TABLE_NAME);
         onCreate(db);
     }
-
-
-
-
-    // Insert an Account
-    public boolean insertAccount(Account account) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(COLUMN_USERNAME, account.getUsername());
-        values.put(COLUMN_EMAIL, account.getEmail());
-        values.put(COLUMN_PASSWORD, account.getPassword());
-        values.put(COLUMN_DOB, account.getDob());
-        values.put(COLUMN_GENDER, account.isGender() ? 1 : 0);
-        values.put(COLUMN_TYPE, account.getType());
-
-        long result = db.insert(TABLE_ACCOUNTS, null, values);
-        return result != -1;
-    }
-
-    // Update an Account
-    public boolean updateAccount(Account account) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(COLUMN_USERNAME, account.getUsername());
-        values.put(COLUMN_EMAIL, account.getEmail());
-        values.put(COLUMN_PASSWORD, account.getPassword());
-        values.put(COLUMN_DOB, account.getDob());
-        values.put(COLUMN_GENDER, account.isGender() ? 1 : 0);
-        values.put(COLUMN_TYPE, account.getType());
-
-        int rowsAffected = db.update(TABLE_ACCOUNTS, values, COLUMN_ID + " = ?", new String[]{String.valueOf(account.getId())});
-        return rowsAffected > 0;
-    }
-
-    // Delete an Account
-    public boolean deleteAccount(int accountId) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        int rowsDeleted = db.delete(TABLE_ACCOUNTS, COLUMN_ID + " = ?", new String[]{String.valueOf(accountId)});
-        return rowsDeleted > 0;
-    }
-
-
-    // Insert a Book
-    public boolean insertBook(String title, String author, String description, int genreId) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(COLUMN_TITLE, title);
-        values.put(COLUMN_AUTHOR, author);
-        values.put(COLUMN_DESCRIPTION, description);
-        values.put(COLUMN_GENRE_ID, genreId);
-
-        long result = db.insert(TABLE_BOOKS, null, values);
-        return result != -1;
-    }
-
-    // Insert a Genre
-    public boolean insertGenre(String name, int totalBooks) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(COLUMN_GENRE_NAME, name);
-        values.put(COLUMN_TOTAL_BOOKS, totalBooks);
-
-        long result = db.insert(TABLE_GENRES, null, values);
-        return result != -1;
-    }
-
-    // Insert a Chapter
-    public boolean insertChapter(String chapterName, int bookId) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(COLUMN_CHAPTER_NAME, chapterName);
-        values.put(COLUMN_BOOK_IDC_FK, bookId);
-
-        long result = db.insert(TABLE_CHAPTERS, null, values);
-        return result != -1;
-    }
-
-    // Retrieve Chapters by Book ID
-    public Cursor getChaptersByBook(int bookId) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        return db.rawQuery("SELECT * FROM " + TABLE_CHAPTERS + " WHERE " + COLUMN_BOOK_IDC_FK + "=?", new String[]{String.valueOf(bookId)});
-    }
-
-    // Log database contents for debugging
-    public void logDatabaseContents() {
-        SQLiteDatabase db = this.getReadableDatabase();
-
-        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_ACCOUNTS, null);
-        Log.d("DATABASE", "Accounts Table:");
-        while (cursor.moveToNext()) {
-            Log.d("DATABASE", "ID: " + cursor.getInt(0) + ", Username: " + cursor.getString(1));
-        }
-        cursor.close();
-
-        cursor = db.rawQuery("SELECT * FROM " + TABLE_BOOKS, null);
-        Log.d("DATABASE", "Books Table:");
-        while (cursor.moveToNext()) {
-            Log.d("DATABASE", "Book ID: " + cursor.getInt(0) + ", Title: " + cursor.getString(1));
-        }
-        cursor.close();
-    }
-    public boolean isUsernameExists(String username) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT 1 FROM Accounts WHERE username = ?", new String[]{username});
-        boolean exists = cursor.moveToFirst();
-        cursor.close();
-        return exists;
-    }
-    public boolean isEmailExists(String email) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT 1 FROM Accounts WHERE email = ?", new String[]{email});
-        boolean exists = cursor.moveToFirst();
-        cursor.close();
-        return exists;
-    }
 }
-

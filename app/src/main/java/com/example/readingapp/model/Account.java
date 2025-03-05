@@ -17,6 +17,11 @@ public class Account {
         this.type = type;
     }
 
+    // Constructor for inserting an account without an ID (ID is auto-incremented)
+    public Account(String username, String email, String password, String dob, boolean gender, int type) {
+        this(0, username, email, password, dob, gender, type);
+    }
+
     // Constructor for login validation
     public Account(int id, int type) {
         this.id = id;
@@ -31,4 +36,13 @@ public class Account {
     public String getDob() { return dob; }
     public boolean isGender() { return gender; }
     public int getType() { return type; }
+
+    // Setters
+    public void setId(int id) { this.id = id; }
+    public void setUsername(String username) { this.username = username; }
+    public void setEmail(String email) { this.email = email; }
+    public void setPassword(String password) { this.password = password; }
+    public void setDob(String dob) { this.dob = dob; }
+    public void setGender(boolean gender) { this.gender = gender; }
+    public void setType(int type) { this.type = type; }
 }
