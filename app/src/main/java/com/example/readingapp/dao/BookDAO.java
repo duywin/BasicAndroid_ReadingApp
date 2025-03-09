@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.example.readingapp.DatabaseHelper;
+import com.example.readingapp.model.Book;
 
 public class BookDAO {
     public static final String TABLE_NAME = "Books";
@@ -22,5 +23,19 @@ public class BookDAO {
 
     public BookDAO(Context context) {
         this.db = new DatabaseHelper(context).getWritableDatabase();
+    }
+    public boolean insertBook(String title, String author, String description, String imageLink, int genreId) {
+        ContentValues values = new ContentValues();
+        values.put("title", title);
+        values.put("author", author);
+        values.put("description", description);
+        values.put("imageLink", imageLink);
+        values.put("genre_id", genreId);
+
+        return db.insert(TABLE_NAME, null, values) != -1;
+    }
+
+    public boolean insertBook(Book book) {
+        return insertBook(book.getTitle(), book.getAuthor(), book.getDescription(), book.getImageLink(), book.getGenreId());
     }
 }

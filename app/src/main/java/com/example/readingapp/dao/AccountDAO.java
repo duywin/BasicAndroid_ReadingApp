@@ -138,4 +138,19 @@ public class AccountDAO {
     public boolean deleteAccount(int id) {
         return db.delete(TABLE_NAME, "id = ?", new String[]{String.valueOf(id)}) > 0;
     }
+    public int[] getGenderDistribution() {
+        int maleCount = 0, femaleCount = 0;
+        Cursor cursor = db.rawQuery("SELECT gender, COUNT(*) FROM " + TABLE_NAME + " GROUP BY gender", null);
+        while (cursor.moveToNext()) {
+            int gender = cursor.getInt(0); // 1 = Male, 0 = Female
+            int count = cursor.getInt(1);
+            if (gender == 1) {
+                maleCount = count;
+            } else {
+                femaleCount = count;
+            }
+        }
+        cursor.close();
+        return new int[]{maleCount, femaleCount};
+    }
 }

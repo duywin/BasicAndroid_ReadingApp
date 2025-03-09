@@ -20,73 +20,75 @@ import java.util.List;
 import android.os.Bundle;
 
 import com.example.readingapp.R;
+import com.example.readingapp.dao.*;
 
 public class adminChart extends AppCompatActivity {
     private BarChart barChart;
     private PieChart pieChart;
+    private AccountDAO accountDAO;
+    private GenreDAO genreDAO;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_chart);
 
+        // Initialize DAOs
+        accountDAO = new AccountDAO(this);
+        genreDAO = new GenreDAO(this);
+
         barChart = findViewById(R.id.barChart);
         pieChart = findViewById(R.id.pieChart);
 
-        // Tạo dữ liệu
-        List<BarEntry> entries = createBarChartData();
-        // Tạo dữ liệu
-        List<PieEntry> entriess = createPieChartData();
+        // Fetch data from database
+        List<BarEntry> barEntries = createBarChartData();
+        List<PieEntry> pieEntries = createPieChartData();
 
-        // Tạo BarDataSet
-        BarDataSet dataSet = new BarDataSet(entries, "Số chương đã đọc");
-        dataSet.setColors(ColorTemplate.MATERIAL_COLORS); // Chọn màu cho các cột
-
-        // Tạo PieDataSet
-        PieDataSet dataSets = new PieDataSet(entriess, "Tỷ lệ truyện đã đọc");
-        dataSet.setColors(ColorTemplate.MATERIAL_COLORS); // Chọn màu cho các phần
-        // Tạo BarData
-        BarData barData = new BarData(dataSet);
-        // Tạo PieData
-        PieData pieData = new PieData(dataSets);
-
-        // Thiết lập dữ liệu cho BarChart
+        // Set up BarChart
+        BarDataSet barDataSet = new BarDataSet(barEntries, "Số sách theo thể loại");
+        barDataSet.setColors(ColorTemplate.MATERIAL_COLORS);
+        BarData barData = new BarData(barDataSet);
         barChart.setData(barData);
-        // Thiết lập dữ liệu cho PieChart
-        pieChart.setData(pieData);
+        barChart.getDescription().setText("Tổng số sách theo thể loại");
+        barChart.animateY(1000);
+        barChart.invalidate();
 
-        // Tùy chỉnh biểu đồ (tùy chọn)
-        barChart.getDescription().setText("Số chương đã đọc trong tuần");
-        barChart.animateY(1000); // Hiệu ứng animation khi hiển thị
-        barChart.setFitBars(true); // Đảm bảo các cột vừa khít với trục x
-        barChart.invalidate(); // Vẽ lại biểu đồ
-        // Tùy chỉnh biểu đồ (tùy chọn)
-        pieChart.getDescription().setEnabled(false); // Ẩn mô tả
-        pieChart.setCenterText("Truyện đã đọc"); // Thêm text ở giữa
-        pieChart.animateY(1000); // Hiệu ứng animation khi hiển thị
-        pieChart.invalidate(); // Vẽ lại biểu đồ
+        // Set up PieChart
+        PieDataSet pieDataSet = new PieDataSet(pieEntries, "Phân bổ giới tính");
+        pieDataSet.setColors(ColorTemplate.MATERIAL_COLORS);
+        PieData pieData = new PieData(pieDataSet);
+        pieChart.setData(pieData);
+        pieChart.setCenterText("Nam vs Nữ");
+        pieChart.animateY(1000);
+        pieChart.invalidate();
     }
 
-
-    // Hàm tạo dữ liệu
+    /**
+     * Fetches total books per genre for BarChart.
+     */
     private List<BarEntry> createBarChartData() {
         List<BarEntry> entries = new ArrayList<>();
-        entries.add(new BarEntry(0f, 10f)); // Ngày 1: 10 chương
-        entries.add(new BarEntry(1f, 15f)); // Ngày 2: 15 chương
-        entries.add(new BarEntry(2f, 8f));  // Ngày 3: 8 chương
-        entries.add(new BarEntry(3f, 12f)); // Ngày 4: 12 chương
-        entries.add(new BarEntry(4f, 20f)); // Ngày 5: 20 chương
-        entries.add(new BarEntry(5f, 5f));  // Ngày 6: 5 chương
-        entries.add(new BarEntry(6f, 18f)); // Ngày 7: 18 chương
+        List<Object[]> genreData = genreDAO.getTotalBooksByGenre();
+
+        for (int i = 0; i < genreData.size(); i++) {
+            Object[] data = genreData.get(i);
+            String genreName = (String) data[0];
+            int totalBooks = (int) data[1];
+            entries.add(new BarEntry(i, totalBooks));
+        }
         return entries;
     }
 
-    // Hàm tạo dữ liệu
+    /**
+     * Fetches gender distribution for PieChart.
+     */
     private List<PieEntry> createPieChartData() {
         List<PieEntry> entries = new ArrayList<>();
-        entries.add(new PieEntry(30f, "Truyện 1")); // 30%
-        entries.add(new PieEntry(20f, "Truyện 2")); // 20%
-        entries.add(new PieEntry(15f, "Truyện 3")); // 15%
-        entries.add(new PieEntry(35f, "Truyện 4")); // 35%
+        int[] genderDistribution = accountDAO.getGenderDistribution();
+
+        entries.add(new PieEntry(genderDistribution[0], "Nam"));
+        entries.add(new PieEntry(genderDistribution[1], "Nữ"));
+
         return entries;
     }
 }
