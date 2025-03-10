@@ -1,6 +1,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:padding="16dp"
     android:background="#f5f5f5">
@@ -29,4 +30,11 @@
         android:layout_height="match_parent"
         android:scrollbars="vertical"/>
 
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/admin_bottom_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:menu="@menu/admin_bottom_menu"
+        app:itemIconTint="@color/bottom_nav_item_color"
+        app:itemTextColor="@color/bottom_nav_item_color" />
 </LinearLayout>
