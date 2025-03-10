@@ -26,6 +26,9 @@
         <activity
             android:name=".Register"
             android:exported="false" />
+        <activity android:name=".ChapterContent"
+            android:exported="false"/>
+
         <activity
             android:name=".LogIn"
             android:exported="true">

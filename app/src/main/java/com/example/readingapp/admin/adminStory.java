@@ -24,6 +24,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import com.example.readingapp.R;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class adminStory extends AppCompatActivity {
 
@@ -44,6 +45,9 @@ public class adminStory extends AppCompatActivity {
 
         storyList = readStoriesFromAssets();
         recyclerView.setAdapter(new StoryAdapter(storyList));
+
+        // Initialize Bottom Navigation
+        setupBottomNavigation();
     }
 
     private List<Story> readStoriesFromAssets() {
@@ -76,6 +80,26 @@ public class adminStory extends AppCompatActivity {
         }
 
         return stories;
+    }
+
+    private void setupBottomNavigation() {
+        BottomNavigationView bottomNavigationView = findViewById(R.id.admin_bottom_navigation);
+        bottomNavigationView.setSelectedItemId(R.id.nav_admin_chart);
+
+        bottomNavigationView.setOnItemSelectedListener(item -> {
+            int id = item.getItemId();
+            if (id == R.id.nav_admin_chart) {
+                startActivity(new Intent(adminStory.this, adminChart.class));
+                return true;
+            } else if (id == R.id.nav_admin_story) {
+                return true;
+            } else if (id == R.id.nav_admin_genre) {
+                return true;
+            } else if (id == R.id.nav_admin_account) {
+                return true;
+            }
+            return false;
+        });
     }
 
     private void addNewStory() {

@@ -29,7 +29,7 @@
     { "name": "Fiction", "total_books": 0 },
     { "name": "Non-Fiction", "total_books": 0 },
     { "name": "Sci-Fi", "total_books": 0 },
-    { "name": "Fantasy", "total_books": 0 },
+    { "name": "Fantasy", "total_books": 2 },
     { "name": "Horror", "total_books": 0 },
     { "name": "Collection", "total_books": 0 }
   ],
@@ -38,14 +38,14 @@
       "title": "Tenth author journal 2A: World-ending Utopia",
       "author": "Wilhelm Duy",
       "description": "First part of the second edition",
-      "imageLink": "assets/books/book1.png",
+      "image_link": "assets/books/book1.png",
       "genre_id": 4
     },
     {
       "title": "Tenth author journal 2B: Broken Marionette",
       "author": "Wilhelm Duy",
       "description": "Second part of the edition",
-      "imageLink": "assets/books/book2.png",
+      "image_link": "assets/books/book2.png",
       "genre_id": 4
     }
   ],

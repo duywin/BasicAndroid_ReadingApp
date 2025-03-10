@@ -2,15 +2,23 @@ package com.example.readingapp;
 
 import android.content.res.AssetManager;
 import android.os.Bundle;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.style.StyleSpan;
+import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
+import org.apache.poi.xwpf.usermodel.XWPFRun;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+
+import static android.graphics.Typeface.BOLD;
+import static android.graphics.Typeface.ITALIC;
 
 public class ChapterContent extends AppCompatActivity {
     private TextView chapterContent;
@@ -31,6 +39,7 @@ public class ChapterContent extends AppCompatActivity {
 
         loadChapterContent(fileName);
     }
+
     private void loadChapterContent(String fileName) {
         if (fileName == null || fileName.isEmpty()) {
             chapterContent.setText("Không tìm thấy nội dung chương.");
@@ -43,38 +52,34 @@ public class ChapterContent extends AppCompatActivity {
 
         try (InputStream inputStream = getAssets().open(filePath)) {
             XWPFDocument document = new XWPFDocument(inputStream);
-            StringBuilder text = new StringBuilder();
+            SpannableStringBuilder formattedText = new SpannableStringBuilder();
 
             for (XWPFParagraph para : document.getParagraphs()) {
-                text.append(para.getText()).append("\n\n");
+                int start = formattedText.length(); // Start index of this paragraph
+                for (XWPFRun run : para.getRuns()) {
+                    int runStart = formattedText.length(); // Start index of this run
+                    formattedText.append(run.text());
+
+                    // Apply Bold
+                    if (run.isBold()) {
+                        formattedText.setSpan(new StyleSpan(BOLD), runStart, formattedText.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    }
+
+                    // Apply Italic
+                    if (run.isItalic()) {
+                        formattedText.setSpan(new StyleSpan(ITALIC), runStart, formattedText.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    }
+
+                }
+                formattedText.append("\n\n"); // Newline after each paragraph
             }
 
-            chapterContent.setText(text.toString());
+            chapterContent.setText(formattedText);
             Log.d("ChapterContent", "Đọc file thành công!");
 
         } catch (IOException e) {
             chapterContent.setText("Lỗi khi tải nội dung chương.");
             Log.e("ChapterContent", "Lỗi khi đọc file: " + filePath, e);
         }
-    }
-
-
-
-    private String readDocxFromAssets(String filePath) {
-        StringBuilder content = new StringBuilder();
-        try {
-            AssetManager assetManager = getAssets();
-            InputStream inputStream = assetManager.open(filePath);
-            XWPFDocument document = new XWPFDocument(inputStream);
-            List<XWPFParagraph> paragraphs = document.getParagraphs();
-            for (XWPFParagraph para : paragraphs) {
-                content.append(para.getText()).append("\n\n");
-            }
-            inputStream.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "Lỗi khi đọc file";
-        }
-        return content.toString();
     }
 }
