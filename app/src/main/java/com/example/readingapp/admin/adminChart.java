@@ -17,10 +17,13 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.readingapp.R;
 import com.example.readingapp.dao.*;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class adminChart extends AppCompatActivity {
     private BarChart barChart;
@@ -40,11 +43,16 @@ public class adminChart extends AppCompatActivity {
         barChart = findViewById(R.id.barChart);
         pieChart = findViewById(R.id.pieChart);
 
-        // Fetch data from database
-        List<BarEntry> barEntries = createBarChartData();
-        List<PieEntry> pieEntries = createPieChartData();
+        // Fetch and display data
+        setupBarChart();
+        setupPieChart();
 
-        // Set up BarChart
+        // Initialize Bottom Navigation
+        setupBottomNavigation();
+    }
+
+    private void setupBarChart() {
+        List<BarEntry> barEntries = createBarChartData();
         BarDataSet barDataSet = new BarDataSet(barEntries, "Số sách theo thể loại");
         barDataSet.setColors(ColorTemplate.MATERIAL_COLORS);
         BarData barData = new BarData(barDataSet);
@@ -52,8 +60,10 @@ public class adminChart extends AppCompatActivity {
         barChart.getDescription().setText("Tổng số sách theo thể loại");
         barChart.animateY(1000);
         barChart.invalidate();
+    }
 
-        // Set up PieChart
+    private void setupPieChart() {
+        List<PieEntry> pieEntries = createPieChartData();
         PieDataSet pieDataSet = new PieDataSet(pieEntries, "Phân bổ giới tính");
         pieDataSet.setColors(ColorTemplate.MATERIAL_COLORS);
         PieData pieData = new PieData(pieDataSet);
@@ -63,32 +73,41 @@ public class adminChart extends AppCompatActivity {
         pieChart.invalidate();
     }
 
-    /**
-     * Fetches total books per genre for BarChart.
-     */
+    private void setupBottomNavigation() {
+        BottomNavigationView bottomNavigationView = findViewById(R.id.admin_bottom_navigation);
+        bottomNavigationView.setSelectedItemId(R.id.nav_admin_chart);
+
+        bottomNavigationView.setOnItemSelectedListener(item -> {
+            int id = item.getItemId();
+            if (id == R.id.nav_admin_chart) {
+                return true; // Already on this page
+            } else if (id == R.id.nav_admin_story) {
+                startActivity(new Intent(adminChart.this, adminStory.class));
+                return true;
+            } else if (id == R.id.nav_admin_genre) {
+                return true;
+            } else if (id == R.id.nav_admin_account) {
+                return true;
+            }
+            return false;
+        });
+    }
+
     private List<BarEntry> createBarChartData() {
         List<BarEntry> entries = new ArrayList<>();
         List<Object[]> genreData = genreDAO.getTotalBooksByGenre();
-
         for (int i = 0; i < genreData.size(); i++) {
             Object[] data = genreData.get(i);
-            String genreName = (String) data[0];
-            int totalBooks = (int) data[1];
-            entries.add(new BarEntry(i, totalBooks));
+            entries.add(new BarEntry(i, (int) data[1]));
         }
         return entries;
     }
 
-    /**
-     * Fetches gender distribution for PieChart.
-     */
     private List<PieEntry> createPieChartData() {
         List<PieEntry> entries = new ArrayList<>();
         int[] genderDistribution = accountDAO.getGenderDistribution();
-
         entries.add(new PieEntry(genderDistribution[0], "Nam"));
         entries.add(new PieEntry(genderDistribution[1], "Nữ"));
-
         return entries;
     }
 }
