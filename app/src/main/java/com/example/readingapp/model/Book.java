@@ -6,12 +6,12 @@ public class Book {
     private String title;
     private String author;
     private String description;
-    private String imageLink;
+    private String image_link;
     private int genreId;
 
-    public Book(int id, String title, String author, String description,String imageLink, int genreId) {
+    public Book(int id, String title, String author, String description,String image_link, int genreId) {
         this.id = id;
-        this.imageLink = imageLink;
+        this.image_link = image_link;
         this.title = title;
         this.author = author;
         this.description = description;
@@ -25,6 +25,6 @@ public class Book {
     public String getDescription() { return description; }
     public int getGenreId() { return genreId; }
 
-    public String getImageLink () {return imageLink;}
+    public String getImageLink () {return image_link;}
 }
 

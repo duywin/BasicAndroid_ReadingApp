@@ -1,7 +1,6 @@
 package com.example.readingapp.admin;
 
 import android.content.Intent;
-import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,28 +8,29 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import com.example.readingapp.R;
+import com.example.readingapp.dao.BookDAO;
+import com.example.readingapp.model.Book;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import com.example.readingapp.R;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class adminStory extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private List<Story> storyList;
     private Button addStoryButton;
+    private StoryAdapter storyAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,44 +41,43 @@ public class adminStory extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         addStoryButton = findViewById(R.id.add_story_button);
-        addStoryButton.setOnClickListener(v -> addNewStory()); // Placeholder for add function
+        addStoryButton.setOnClickListener(v -> addNewStory());
 
-        storyList = readStoriesFromAssets();
-        recyclerView.setAdapter(new StoryAdapter(storyList));
+        loadStories();
 
         // Initialize Bottom Navigation
         setupBottomNavigation();
     }
 
-    private List<Story> readStoriesFromAssets() {
-        List<Story> stories = new ArrayList<>();
-        AssetManager assetManager = getAssets();
 
-        try (InputStream inputStream = assetManager.open("preload_data.json");
-             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
-            StringBuilder json = new StringBuilder();
-            String line;
-            while ((line = reader.readLine()) != null) {
-                json.append(line);
-            }
+    // Load books from database
+    private void loadStories() {
+        storyList = readStoriesFromDatabase();
+        recyclerView.setAdapter(new StoryAdapter(storyList));
+    }
 
-            JSONArray booksArray = new JSONObject(json.toString()).getJSONArray("books");
-            for (int i = 0; i < booksArray.length(); i++) {
-                JSONObject book = booksArray.getJSONObject(i);
-                String imagePath = book.getString("image_link");
-                String imageName = imagePath.substring(imagePath.lastIndexOf("/") + 1);
-                stories.add(new Story(
-                        i + 1,
-                        book.getString("title"),
-                        book.getString("author"),
-                        book.getString("description"),
-                        imageName
-                ));
-            }
-        } catch (IOException | JSONException e) {
-            e.printStackTrace();
+    // Handle result after add/edit
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1 && resultCode == RESULT_OK) {
+            loadStories(); // Refresh after returning
         }
+    }
+    private List<Story> readStoriesFromDatabase() {
+        List<Story> stories = new ArrayList<>();
+        BookDAO bookDAO = new BookDAO(this);
+        List<Book> books = bookDAO.getAllBooks();
 
+        for (Book book : books) {
+            stories.add(new Story(
+                    book.getId(),
+                    book.getTitle(),
+                    book.getAuthor(),
+                    book.getDescription(),
+                    book.getImageLink()
+            ));
+        }
         return stories;
     }
 
@@ -103,7 +102,8 @@ public class adminStory extends AppCompatActivity {
     }
 
     private void addNewStory() {
-        // Placeholder for adding a new story
+        Intent intent = new Intent(adminStory.this, AddStoryActivity.class);
+        startActivity(intent);
     }
 
     private static class Story {
@@ -141,8 +141,14 @@ public class adminStory extends AppCompatActivity {
             holder.storyAuthor.setText("Tác giả: " + story.author);
             holder.storyDescription.setText(story.description);
 
-            String assetPath = "file:///android_asset/books/" + story.imageUrl;
-            Glide.with(holder.storyImage.getContext()).load(assetPath).into(holder.storyImage);
+            // Check if the image is stored in internal storage
+            File internalImage = new File(getFilesDir(), "books/" + story.imageUrl);
+            if (internalImage.exists()) {
+                Glide.with(holder.storyImage.getContext()).load(internalImage).into(holder.storyImage);
+            } else {
+                String assetPath = "file:///android_asset/books/" + story.imageUrl;
+                Glide.with(holder.storyImage.getContext()).load(assetPath).into(holder.storyImage);
+            }
 
             holder.editButton.setOnClickListener(v -> editStory(story.id)); // Placeholder for edit function
             holder.deleteButton.setOnClickListener(v -> deleteStory(story.id)); // Placeholder for delete function
@@ -177,11 +183,29 @@ public class adminStory extends AppCompatActivity {
         }
     }
 
+
     private void editStory(int storyId) {
-        // Placeholder for editing a story
+        Intent intent = new Intent(adminStory.this, AddStoryActivity.class);
+        intent.putExtra("BOOK_ID", storyId);
+        startActivity(intent);
     }
 
     private void deleteStory(int storyId) {
-        // Placeholder for deleting a story
+        BookDAO bookDAO = new BookDAO(this);
+        Book book = bookDAO.getBookById(storyId);
+
+        if (book != null) {
+            boolean deleted = bookDAO.deleteBook(storyId);
+            if (deleted) {
+                File imageFile = new File(getFilesDir(), book.getImageLink());
+                if (imageFile.exists()) {
+                    imageFile.delete();
+                }
+                loadStories();
+                Toast.makeText(this, "Xóa truyện thành công!", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Lỗi khi xóa truyện!", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 }

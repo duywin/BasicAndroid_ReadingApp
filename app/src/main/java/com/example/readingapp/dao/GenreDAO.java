@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.example.readingapp.DatabaseHelper;
+import com.example.readingapp.model.Genre;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,5 +42,17 @@ public class GenreDAO {
         }
         cursor.close();
         return genreData;
+    }
+    public List<Genre> getAllGenres() {
+        List<Genre> genres = new ArrayList<>();
+        Cursor cursor = db.rawQuery("SELECT id, name FROM " + TABLE_NAME, null);
+
+        while (cursor.moveToNext()) {
+            int id = cursor.getInt(0);
+            String name = cursor.getString(1);
+            genres.add(new Genre(id, name, 0)); // Default 0 for total_books if not needed
+        }
+        cursor.close();
+        return genres;
     }
 }

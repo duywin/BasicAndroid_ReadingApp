@@ -2,6 +2,7 @@ package com.example.readingapp;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
@@ -20,7 +21,7 @@ import java.util.Iterator;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "ReadingApp.db";
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3; // Keep version 3 or increase if needed
     private final Context context;
 
     public DatabaseHelper(Context context) {
@@ -70,17 +71,39 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             JSONObject data = dataArray.getJSONObject(i);
             ContentValues values = new ContentValues();
 
-            Iterator<String> keys = data.keys(); // Get keys iterator
-            while (keys.hasNext()) { // Iterate over keys
+            Iterator<String> keys = data.keys();
+            while (keys.hasNext()) {
                 String key = keys.next();
-                values.put(key, data.get(key).toString());
+                if (key.equals("id")) {
+                    values.put(key, data.getInt(key)); // Ensure the ID is explicitly inserted
+                } else {
+                    values.put(key, data.get(key).toString());
+                }
             }
 
-            db.insert(tableName, null, values);
-            Log.d("DatabaseHelper", "Inserted into " + tableName + ": " + values);
+            // Check if the record already exists before inserting
+            if (!recordExists(db, tableName, values)) {
+                long result = db.insertWithOnConflict(tableName, null, values, SQLiteDatabase.CONFLICT_IGNORE);
+                if (result == -1) {
+                    Log.d("DatabaseHelper", "Skipping duplicate entry for " + tableName + ": " + values);
+                } else {
+                    Log.d("DatabaseHelper", "Inserted into " + tableName + ": " + values);
+                }
+            }
         }
     }
 
+
+    private boolean recordExists(SQLiteDatabase db, String tableName, ContentValues values) {
+        String columnToCheck = "id"; // Assuming 'id' is the primary key
+        if (!values.containsKey(columnToCheck)) return false;
+
+        String id = values.getAsString(columnToCheck);
+        Cursor cursor = db.rawQuery("SELECT 1 FROM " + tableName + " WHERE id = ?", new String[]{id});
+        boolean exists = cursor.moveToFirst();
+        cursor.close();
+        return exists;
+    }
 
     private String loadJSONFromAsset(String fileName) {
         try (InputStream is = context.getAssets().open(fileName)) {
@@ -93,14 +116,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             return null;
         }
     }
-
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + AccountDAO.TABLE_NAME);
-        db.execSQL("DROP TABLE IF EXISTS " + GenreDAO.TABLE_NAME);
-        db.execSQL("DROP TABLE IF EXISTS " + BookDAO.TABLE_NAME);
-        db.execSQL("DROP TABLE IF EXISTS " + FavoriteDAO.TABLE_NAME);
-        db.execSQL("DROP TABLE IF EXISTS " + ChapterDAO.TABLE_NAME);
-        onCreate(db);
+        if (oldVersion < newVersion) {
+            Log.d("DatabaseHelper", "Upgrading database from version " + oldVersion + " to " + newVersion);
+            db.execSQL("DROP TABLE IF EXISTS " + BookDAO.TABLE_NAME);
+            db.execSQL("DROP TABLE IF EXISTS " + GenreDAO.TABLE_NAME);
+            db.execSQL("DROP TABLE IF EXISTS " + AccountDAO.TABLE_NAME);
+            db.execSQL("DROP TABLE IF EXISTS " + FavoriteDAO.TABLE_NAME);
+            db.execSQL("DROP TABLE IF EXISTS " + ChapterDAO.TABLE_NAME);
+
+            onCreate(db); // Recreate database tables
+        }
     }
+
 }
