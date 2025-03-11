@@ -4,9 +4,9 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -50,7 +50,7 @@ public class adminGenre extends AppCompatActivity {
         header.addView(createTextView("ID", true));
         header.addView(createTextView("Thể loại", true));
         header.addView(createTextView("Tổng sách", true));
-        header.addView(createTextView("Xóa", true));
+        header.addView(createTextView("Thao tác", true));
         genreTable.addView(header);
 
         for (Genre genre : genres) {
@@ -59,8 +59,12 @@ public class adminGenre extends AppCompatActivity {
             row.addView(createTextView(genre.getName(), false));
             row.addView(createTextView(String.valueOf(genre.getTotalBooks()), false));
 
-            Button deleteButton = new Button(this);
-            deleteButton.setText("Xóa");
+            ImageButton deleteButton = new ImageButton(this);
+            deleteButton.setImageResource(R.drawable.delete_icon); // Use your delete icon
+            deleteButton.setBackground(null); // Remove background for a cleaner look
+            TableRow.LayoutParams params = new TableRow.LayoutParams(120, 120); // 16dp (48px) in pixels
+            deleteButton.setLayoutParams(params);
+            deleteButton.setPadding(4, 4, 4, 4);
             deleteButton.setOnClickListener(v -> deleteGenre(genre.getId()));
 
             row.addView(deleteButton);
@@ -102,7 +106,6 @@ public class adminGenre extends AppCompatActivity {
         });
 
         builder.setNegativeButton("Hủy", (dialog, which) -> dialog.cancel());
-
         builder.show();
     }
 

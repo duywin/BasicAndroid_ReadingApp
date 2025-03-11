@@ -81,18 +81,18 @@
             android:layout_marginTop="20dp"
             android:inputType="textPassword"/>
 
-        <!-- Ngày sinh -->
         <EditText
             android:id="@+id/Edt_DOB"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:hint="Ngày sinh"
-
             android:textColor="#5D4037"
             android:background="#F5F5F5"
+
             android:padding="12dp"
             android:layout_marginTop="20dp"
-            android:inputType="date"/>
+            android:focusable="false"
+            android:clickable="true"/>
 
         <!-- Giới tính -->
         <LinearLayout

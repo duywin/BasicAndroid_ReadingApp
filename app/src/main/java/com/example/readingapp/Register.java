@@ -2,6 +2,7 @@ package com.example.readingapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Patterns;
@@ -12,6 +13,8 @@ import android.widget.Toast;
 
 import com.example.readingapp.dao.AccountDAO;
 import com.example.readingapp.model.Account;
+
+import java.util.Calendar;
 
 public class Register extends AppCompatActivity {
     private EditText edtEmail, edtName, edtPass, edtRePass, edtDOB;
@@ -35,6 +38,22 @@ public class Register extends AppCompatActivity {
         btnRegister = findViewById(R.id.Btn_Register);
 
         btnRegister.setOnClickListener(v -> registerUser());
+        edtDOB.setOnClickListener(v -> showDatePicker());
+
+    }
+
+    private void showDatePicker() {
+        final Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this, (view, year1, month1, dayOfMonth) -> {
+            String selectedDate = dayOfMonth + "/" + (month1 + 1) + "/" + year1;
+            edtDOB.setText(selectedDate);
+        }, year, month, day);
+
+        datePickerDialog.show();
     }
 
     private void registerUser() {

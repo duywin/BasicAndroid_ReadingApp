@@ -47,6 +47,7 @@
             android:id="@+id/Edt_Password"
             android:layout_width="280dp"
             android:layout_height="50dp"
+            android:inputType="textPassword"
             android:hint="Mật khẩu"
             android:textColor="#5D4037"
             android:background="#F5F5F5"
