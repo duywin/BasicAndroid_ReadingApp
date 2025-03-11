@@ -80,11 +80,12 @@ public class adminChart extends AppCompatActivity {
         bottomNavigationView.setOnItemSelectedListener(item -> {
             int id = item.getItemId();
             if (id == R.id.nav_admin_chart) {
-                return true; // Already on this page
+                return true;
             } else if (id == R.id.nav_admin_story) {
                 startActivity(new Intent(adminChart.this, adminStory.class));
                 return true;
             } else if (id == R.id.nav_admin_genre) {
+                startActivity(new Intent(adminChart.this, adminGenre.class));
                 return true;
             } else if (id == R.id.nav_admin_account) {
                 return true;

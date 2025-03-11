@@ -93,6 +93,7 @@ public class adminStory extends AppCompatActivity {
             } else if (id == R.id.nav_admin_story) {
                 return true;
             } else if (id == R.id.nav_admin_genre) {
+                startActivity(new Intent(adminStory.this, adminGenre.class));
                 return true;
             } else if (id == R.id.nav_admin_account) {
                 return true;
