@@ -143,6 +143,7 @@ public class adminGenre extends AppCompatActivity {
             } else if (id == R.id.nav_admin_genre) {
                 return true;
             } else if (id == R.id.nav_admin_account) {
+                startActivity(new Intent(adminGenre.this, adminAccount.class));
                 return true;
             }
             return false;

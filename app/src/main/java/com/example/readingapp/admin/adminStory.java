@@ -44,16 +44,14 @@ public class adminStory extends AppCompatActivity {
         addStoryButton.setOnClickListener(v -> addNewStory());
 
         loadStories();
-
-        // Initialize Bottom Navigation
         setupBottomNavigation();
     }
-
 
     // Load books from database
     private void loadStories() {
         storyList = readStoriesFromDatabase();
-        recyclerView.setAdapter(new StoryAdapter(storyList));
+        storyAdapter = new StoryAdapter(storyList);
+        recyclerView.setAdapter(storyAdapter);
     }
 
     // Handle result after add/edit
@@ -64,6 +62,7 @@ public class adminStory extends AppCompatActivity {
             loadStories(); // Refresh after returning
         }
     }
+
     private List<Story> readStoriesFromDatabase() {
         List<Story> stories = new ArrayList<>();
         BookDAO bookDAO = new BookDAO(this);
@@ -83,7 +82,7 @@ public class adminStory extends AppCompatActivity {
 
     private void setupBottomNavigation() {
         BottomNavigationView bottomNavigationView = findViewById(R.id.admin_bottom_navigation);
-        bottomNavigationView.setSelectedItemId(R.id.nav_admin_chart);
+        bottomNavigationView.setSelectedItemId(R.id.nav_admin_story);
 
         bottomNavigationView.setOnItemSelectedListener(item -> {
             int id = item.getItemId();
@@ -96,6 +95,7 @@ public class adminStory extends AppCompatActivity {
                 startActivity(new Intent(adminStory.this, adminGenre.class));
                 return true;
             } else if (id == R.id.nav_admin_account) {
+                startActivity(new Intent(adminStory.this, adminAccount.class));
                 return true;
             }
             return false;
@@ -104,7 +104,7 @@ public class adminStory extends AppCompatActivity {
 
     private void addNewStory() {
         Intent intent = new Intent(adminStory.this, AddStoryActivity.class);
-        startActivity(intent);
+        startActivityForResult(intent, 1);
     }
 
     private static class Story {
@@ -137,12 +137,11 @@ public class adminStory extends AppCompatActivity {
         @Override
         public void onBindViewHolder(@NonNull StoryViewHolder holder, int position) {
             Story story = stories.get(position);
-            holder.storyId.setText("ID: " + story.id);
             holder.storyTitle.setText(story.title);
             holder.storyAuthor.setText("Tác giả: " + story.author);
             holder.storyDescription.setText(story.description);
 
-            // Check if the image is stored in internal storage
+            // Load image correctly from internal storage or assets
             File internalImage = new File(getFilesDir(), "books/" + story.imageUrl);
             if (internalImage.exists()) {
                 Glide.with(holder.storyImage.getContext()).load(internalImage).into(holder.storyImage);
@@ -151,14 +150,8 @@ public class adminStory extends AppCompatActivity {
                 Glide.with(holder.storyImage.getContext()).load(assetPath).into(holder.storyImage);
             }
 
-            holder.editButton.setOnClickListener(v -> editStory(story.id)); // Placeholder for edit function
-            holder.deleteButton.setOnClickListener(v -> deleteStory(story.id)); // Placeholder for delete function
-
-            holder.itemView.setOnClickListener(v -> {
-                Intent intent = new Intent(adminStory.this, adminChapter.class);
-                intent.putExtra("BOOK_ID", story.id);
-                startActivity(intent);
-            });
+            holder.editButton.setOnClickListener(v -> editStory(story.id));
+            holder.deleteButton.setOnClickListener(v -> deleteStory(story.id));
         }
 
         @Override
@@ -167,7 +160,7 @@ public class adminStory extends AppCompatActivity {
         }
 
         public class StoryViewHolder extends RecyclerView.ViewHolder {
-            TextView storyId, storyTitle, storyAuthor, storyDescription;
+            TextView storyTitle, storyAuthor, storyDescription;
             ImageView storyImage;
             Button editButton, deleteButton;
 
@@ -183,11 +176,10 @@ public class adminStory extends AppCompatActivity {
         }
     }
 
-
     private void editStory(int storyId) {
         Intent intent = new Intent(adminStory.this, AddStoryActivity.class);
         intent.putExtra("BOOK_ID", storyId);
-        startActivity(intent);
+        startActivityForResult(intent, 1);
     }
 
     private void deleteStory(int storyId) {
@@ -197,11 +189,11 @@ public class adminStory extends AppCompatActivity {
         if (book != null) {
             boolean deleted = bookDAO.deleteBook(storyId);
             if (deleted) {
-                File imageFile = new File(getFilesDir(), book.getImageLink());
+                File imageFile = new File(getFilesDir(), "books/" + book.getImageLink());
                 if (imageFile.exists()) {
                     imageFile.delete();
                 }
-                loadStories();
+                loadStories(); // Refresh list after delete
                 Toast.makeText(this, "Xóa truyện thành công!", Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(this, "Lỗi khi xóa truyện!", Toast.LENGTH_SHORT).show();

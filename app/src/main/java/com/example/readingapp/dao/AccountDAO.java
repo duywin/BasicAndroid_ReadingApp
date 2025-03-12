@@ -36,7 +36,7 @@ public class AccountDAO {
         values.put("password", password);
         values.put("dob", dob);
         values.put("gender", gender ? 1 : 0);
-        values.put("type", type);
+        values.put("type", type); //1: thường; 2: vip; 3: admin
 
         return db.insert(TABLE_NAME, null, values) != -1;
     }

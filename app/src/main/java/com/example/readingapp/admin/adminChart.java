@@ -88,6 +88,7 @@ public class adminChart extends AppCompatActivity {
                 startActivity(new Intent(adminChart.this, adminGenre.class));
                 return true;
             } else if (id == R.id.nav_admin_account) {
+                startActivity(new Intent(adminChart.this, adminAccount.class));
                 return true;
             }
             return false;
