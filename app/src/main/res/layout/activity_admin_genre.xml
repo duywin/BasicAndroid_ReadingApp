@@ -49,5 +49,6 @@
         android:layout_height="wrap_content"
         app:menu="@menu/admin_bottom_menu"
         app:itemIconTint="@color/bottom_nav_background"
-        app:itemTextColor="@color/bottom_nav_background"  />
+        app:itemTextColor="@color/bottom_nav_background"
+        app:labelVisibilityMode="labeled"/>
 </LinearLayout>

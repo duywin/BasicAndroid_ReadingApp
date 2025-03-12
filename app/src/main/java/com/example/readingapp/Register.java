@@ -14,7 +14,13 @@ import android.widget.Toast;
 import com.example.readingapp.dao.AccountDAO;
 import com.example.readingapp.model.Account;
 
-import java.util.Calendar;
+import com.google.android.material.datepicker.MaterialDatePicker;
+import com.google.android.material.datepicker.CalendarConstraints;
+import com.google.android.material.datepicker.DateValidatorPointBackward;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 public class Register extends AppCompatActivity {
     private EditText edtEmail, edtName, edtPass, edtRePass, edtDOB;
@@ -43,17 +49,25 @@ public class Register extends AppCompatActivity {
     }
 
     private void showDatePicker() {
-        final Calendar calendar = Calendar.getInstance();
-        int year = calendar.get(Calendar.YEAR);
-        int month = calendar.get(Calendar.MONTH);
-        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        // Set date constraints (Only past dates allowed)
+        CalendarConstraints.Builder constraintsBuilder = new CalendarConstraints.Builder()
+                .setValidator(DateValidatorPointBackward.now());
 
-        DatePickerDialog datePickerDialog = new DatePickerDialog(this, (view, year1, month1, dayOfMonth) -> {
-            String selectedDate = dayOfMonth + "/" + (month1 + 1) + "/" + year1;
+        // Create the date picker
+        MaterialDatePicker<Long> datePicker = MaterialDatePicker.Builder.datePicker()
+                .setTitleText("Chọn ngày sinh")
+                .setSelection(MaterialDatePicker.todayInUtcMilliseconds()) // Default selection
+                .setCalendarConstraints(constraintsBuilder.build())
+                .build();
+
+        // Show picker and get selected date
+        datePicker.addOnPositiveButtonClickListener(selection -> {
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+            String selectedDate = sdf.format(new Date(selection));
             edtDOB.setText(selectedDate);
-        }, year, month, day);
+        });
 
-        datePickerDialog.show();
+        datePicker.show(getSupportFragmentManager(), "DATE_PICKER");
     }
 
     private void registerUser() {
