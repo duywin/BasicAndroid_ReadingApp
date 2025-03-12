@@ -1,0 +1,21 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_admin_chart"
+        android:icon="@drawable/home"
+        android:title="Trang chủ" />
+
+    <item
+        android:id="@+id/nav_admin_story"
+        android:icon="@drawable/search"
+        android:title="Kết quả tìm kiếm" />
+
+    <item
+        android:id="@+id/nav_admin_genre"
+        android:icon="@drawable/favorite"
+        android:title="Yêu thích" />
+
+    <item
+        android:id="@+id/nav_admin_account"
+        android:icon="@drawable/account"
+        android:title="Tài khoản cá nhân" />
+</menu>

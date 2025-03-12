@@ -173,7 +173,6 @@ public class adminStory extends AppCompatActivity {
 
             StoryViewHolder(View itemView) {
                 super(itemView);
-                storyId = itemView.findViewById(R.id.story_id);
                 storyTitle = itemView.findViewById(R.id.story_title);
                 storyAuthor = itemView.findViewById(R.id.story_author);
                 storyDescription = itemView.findViewById(R.id.story_description);
