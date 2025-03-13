@@ -18,4 +18,8 @@ public class Chapter {
     public String getChapterName() { return chapterName; }
     public int getBookId() { return bookId; }
     public String getLink() {return link;}
+
+    public void setLink(String link) {
+        this.link = link;
+    }
 }

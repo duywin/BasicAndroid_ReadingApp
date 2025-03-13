@@ -32,7 +32,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AddStoryActivity extends AppCompatActivity {
+public class addStoryActivity extends AppCompatActivity {
     private EditText titleInput, authorInput, descriptionInput;
     private Spinner genreSpinner;
     private ImageView storyImagePreview;

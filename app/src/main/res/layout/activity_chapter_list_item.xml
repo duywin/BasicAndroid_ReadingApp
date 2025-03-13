@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -26,13 +27,11 @@
         android:paddingTop="4dp"
         android:visibility="gone" />
 
-    <!-- Delete Button (only visible in AdminChapter) -->
+    <!-- Delete Button -->
     <Button
         android:id="@+id/btn_delete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Delete"
-        android:layout_marginTop="8dp"
-        android:visibility="gone"/> <!-- Initially hidden -->
-
+        android:layout_marginTop="8dp"/> <!-- No more android:visibility="gone" -->
 </LinearLayout>

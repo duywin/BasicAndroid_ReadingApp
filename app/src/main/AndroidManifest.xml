@@ -12,6 +12,12 @@
         android:theme="@style/Theme.ReadingApp"
         tools:targetApi="31">
         <activity
+            android:name=".admin.UploadChapterActivity"
+            android:exported="false" />
+        <activity
+            android:name=".admin.WriteChapterActivity"
+            android:exported="false" />
+        <activity
             android:name=".admin.inputAccount"
             android:exported="false" />
         <activity
@@ -21,7 +27,7 @@
             android:name=".admin.adminGenre"
             android:exported="false" />
         <activity
-            android:name=".admin.AddStoryActivity"
+            android:name=".admin.addStoryActivity"
             android:exported="false" />
         <activity
             android:name=".admin.adminStory"

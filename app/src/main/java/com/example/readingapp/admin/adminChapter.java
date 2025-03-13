@@ -1,13 +1,6 @@
 package com.example.readingapp.admin;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.os.Bundle;
-import com.example.readingapp.R;
-import com.example.readingapp.*;
-
 import android.content.Intent;
-import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,24 +8,25 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
+
+import com.example.readingapp.ChapterContent;
+import com.example.readingapp.R;
+import com.example.readingapp.dao.ChapterDAO;
+import com.example.readingapp.model.Chapter;
+
 import java.util.List;
 
 public class adminChapter extends AppCompatActivity {
 
     private RecyclerView recyclerView;
-    private List<ChapterItem> chapterList;
+    private Button btnWriteChapter, btnUploadChapter, btnBack;
+    private List<Chapter> chapterList;
+    private ChapterDAO chapterDAO;
     private int bookId;
 
     @Override
@@ -43,53 +37,35 @@ public class adminChapter extends AppCompatActivity {
         recyclerView = findViewById(R.id.chapter_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+        btnWriteChapter = findViewById(R.id.btn_write_chapter);
+        btnUploadChapter = findViewById(R.id.btn_upload_chapter);
+        btnBack = findViewById(R.id.btn_back_admin_story);
+
+        chapterDAO = new ChapterDAO(this);
         bookId = getIntent().getIntExtra("BOOK_ID", -1);
-        chapterList = readChaptersFromAssets(bookId);
 
+        chapterList = chapterDAO.getChaptersByBookId(bookId);
         recyclerView.setAdapter(new ChapterAdapter(chapterList));
-    }
 
-    private List<ChapterItem> readChaptersFromAssets(int bookId) {
-        List<ChapterItem> chapters = new ArrayList<>();
-        AssetManager assetManager = getAssets();
+        btnWriteChapter.setOnClickListener(v -> {
+            Intent intent = new Intent(adminChapter.this, WriteChapterActivity.class);
+            intent.putExtra("BOOK_ID", bookId);  // ✅ Pass book ID
+            startActivity(intent);
+        });
 
-        try (InputStream inputStream = assetManager.open("preload_data.json");
-             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
-            StringBuilder json = new StringBuilder();
-            String line;
-            while ((line = reader.readLine()) != null) {
-                json.append(line);
-            }
+        btnUploadChapter.setOnClickListener(v -> {
+            Intent intent = new Intent(adminChapter.this, UploadChapterActivity.class);
+            intent.putExtra("BOOK_ID", bookId);  // ✅ Pass book ID
+            startActivity(intent);
+        });
 
-            JSONArray chaptersArray = new JSONObject(json.toString()).getJSONArray("chapters");
-            for (int i = 0; i < chaptersArray.length(); i++) {
-                JSONObject chapterObj = chaptersArray.getJSONObject(i);
-                if (chapterObj.getInt("book_id") == bookId) {
-                    chapters.add(new ChapterItem(
-                            chapterObj.getString("chapter_name"),
-                            chapterObj.getString("link")
-                    ));
-                }
-            }
-        } catch (IOException | JSONException e) {
-            e.printStackTrace();
-        }
-        return chapters;
-    }
-
-    private static class ChapterItem {
-        String name, link;
-
-        ChapterItem(String name, String link) {
-            this.name = name;
-            this.link = link;
-        }
+        btnBack.setOnClickListener(v -> finish());
     }
 
     private class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ChapterViewHolder> {
-        private final List<ChapterItem> chapters;
+        private final List<Chapter> chapters;
 
-        ChapterAdapter(List<ChapterItem> chapters) {
+        ChapterAdapter(List<Chapter> chapters) {
             this.chapters = chapters;
         }
 
@@ -102,22 +78,26 @@ public class adminChapter extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(@NonNull ChapterViewHolder holder, int position) {
-            ChapterItem chapter = chapters.get(position);
-            holder.chapterName.setText(chapter.name);
+            Chapter chapter = chapters.get(position);
+            holder.chapterName.setText(chapter.getChapterName());
 
-            // Open chapter content on click
             holder.itemView.setOnClickListener(v -> {
                 Intent intent = new Intent(adminChapter.this, ChapterContent.class);
-                intent.putExtra("CHAPTER_NAME", chapter.name);
-                intent.putExtra("CHAPTER_LINK", chapter.link);
+                intent.putExtra("CHAPTER_NAME", chapter.getChapterName());
+                intent.putExtra("CHAPTER_LINK", chapter.getLink());
                 startActivity(intent);
             });
 
-            // Handle delete button click
             holder.deleteButton.setOnClickListener(v -> {
-                chapters.remove(position);
-                notifyItemRemoved(position);
-                Toast.makeText(adminChapter.this, "Chapter deleted", Toast.LENGTH_SHORT).show();
+                boolean deleted = chapterDAO.deleteChapter(chapter.getId());
+
+                if (deleted) {
+                    chapters.remove(position);
+                    notifyItemRemoved(position);
+                    Toast.makeText(adminChapter.this, "Chapter deleted", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(adminChapter.this, "Error deleting chapter!", Toast.LENGTH_SHORT).show();
+                }
             });
         }
 

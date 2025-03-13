@@ -50,17 +50,13 @@ public class adminStory extends AppCompatActivity {
     // Load books from database
     private void loadStories() {
         storyList = readStoriesFromDatabase();
+
+        if (storyList == null) {
+            storyList = new ArrayList<>(); // Prevent NullPointerException
+        }
+
         storyAdapter = new StoryAdapter(storyList);
         recyclerView.setAdapter(storyAdapter);
-    }
-
-    // Handle result after add/edit
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1 && resultCode == RESULT_OK) {
-            loadStories(); // Refresh after returning
-        }
     }
 
     private List<Story> readStoriesFromDatabase() {
@@ -68,15 +64,20 @@ public class adminStory extends AppCompatActivity {
         BookDAO bookDAO = new BookDAO(this);
         List<Book> books = bookDAO.getAllBooks();
 
-        for (Book book : books) {
-            stories.add(new Story(
-                    book.getId(),
-                    book.getTitle(),
-                    book.getAuthor(),
-                    book.getDescription(),
-                    book.getImageLink()
-            ));
+        if (books != null) {
+            for (Book book : books) {
+                stories.add(new Story(
+                        book.getId(),
+                        book.getTitle(),
+                        book.getAuthor(),
+                        book.getDescription(),
+                        book.getImageLink()
+                ));
+            }
+        } else {
+            Toast.makeText(this, "Error loading books!", Toast.LENGTH_SHORT).show();
         }
+
         return stories;
     }
 
@@ -103,7 +104,7 @@ public class adminStory extends AppCompatActivity {
     }
 
     private void addNewStory() {
-        Intent intent = new Intent(adminStory.this, AddStoryActivity.class);
+        Intent intent = new Intent(adminStory.this, addStoryActivity.class);
         startActivityForResult(intent, 1);
     }
 
@@ -152,6 +153,13 @@ public class adminStory extends AppCompatActivity {
 
             holder.editButton.setOnClickListener(v -> editStory(story.id));
             holder.deleteButton.setOnClickListener(v -> deleteStory(story.id));
+
+            // Navigate to adminChapter to show chapters for the selected book
+            holder.itemView.setOnClickListener(v -> {
+                Intent intent = new Intent(adminStory.this, adminChapter.class);
+                intent.putExtra("BOOK_ID", story.id);
+                startActivity(intent);
+            });
         }
 
         @Override
@@ -177,7 +185,7 @@ public class adminStory extends AppCompatActivity {
     }
 
     private void editStory(int storyId) {
-        Intent intent = new Intent(adminStory.this, AddStoryActivity.class);
+        Intent intent = new Intent(adminStory.this, addStoryActivity.class);
         intent.putExtra("BOOK_ID", storyId);
         startActivityForResult(intent, 1);
     }
