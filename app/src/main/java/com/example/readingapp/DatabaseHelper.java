@@ -36,9 +36,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(BookDAO.CREATE_TABLE);
         db.execSQL(FavoriteDAO.CREATE_TABLE);
         db.execSQL(ChapterDAO.CREATE_TABLE);
+        db.execSQL(LogDAO.CREATE_TABLE);  // ✅ Add Logs table
 
-        preloadData(db);
+        Log.d("DatabaseHelper", "All tables created successfully!");
     }
+
 
     private void preloadData(SQLiteDatabase db) {
         String jsonString = loadJSONFromAsset("preload_data.json");
@@ -125,8 +127,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             db.execSQL("DROP TABLE IF EXISTS " + AccountDAO.TABLE_NAME);
             db.execSQL("DROP TABLE IF EXISTS " + FavoriteDAO.TABLE_NAME);
             db.execSQL("DROP TABLE IF EXISTS " + ChapterDAO.TABLE_NAME);
+            db.execSQL("DROP TABLE IF EXISTS " + LogDAO.TABLE_NAME); // ✅ Drop Logs table if exists
 
-            onCreate(db); // Recreate database tables
+            onCreate(db); // ✅ Recreate database tables
         }
     }
 
