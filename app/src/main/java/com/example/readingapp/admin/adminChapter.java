@@ -1,6 +1,7 @@
 package com.example.readingapp.admin;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.readingapp.ChapterContent;
+import com.example.readingapp.LogIn;
 import com.example.readingapp.R;
 import com.example.readingapp.dao.ChapterDAO;
 import com.example.readingapp.model.Chapter;
@@ -28,6 +30,9 @@ public class adminChapter extends AppCompatActivity {
     private List<Chapter> chapterList;
     private ChapterDAO chapterDAO;
     private int bookId;
+
+    private int accountId;
+    private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +51,17 @@ public class adminChapter extends AppCompatActivity {
 
         chapterList = chapterDAO.getChaptersByBookId(bookId);
         recyclerView.setAdapter(new ChapterAdapter(chapterList));
+
+        sharedPreferences = getSharedPreferences("user_prefs", MODE_PRIVATE);
+        accountId = sharedPreferences.getInt("account_id", -1);
+
+        if (accountId == -1) {
+            Toast.makeText(this, "Lỗi: Không tìm thấy tài khoản!", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(this, LogIn.class));
+            finish();
+            return;
+        }
+
 
         btnWriteChapter.setOnClickListener(v -> {
             Intent intent = new Intent(adminChapter.this, WriteChapterActivity.class);

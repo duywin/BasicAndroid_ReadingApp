@@ -1,6 +1,7 @@
 package com.example.readingapp.admin;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.widget.Button;
@@ -9,6 +10,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.readingapp.LogIn;
 import com.example.readingapp.R;
 import com.example.readingapp.dao.ChapterDAO;
 
@@ -26,6 +28,10 @@ public class UploadChapterActivity extends AppCompatActivity {
     private ChapterDAO chapterDAO;
     private int bookId;
 
+    private int accountId;
+    private SharedPreferences sharedPreferences;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +47,17 @@ public class UploadChapterActivity extends AppCompatActivity {
             Toast.makeText(this, "Lỗi: Không tìm thấy BOOK_ID!", Toast.LENGTH_SHORT).show();
             finish(); // Prevent saving without a valid bookId
         }
+
+        sharedPreferences = getSharedPreferences("user_prefs", MODE_PRIVATE);
+        accountId = sharedPreferences.getInt("account_id", -1);
+
+        if (accountId == -1) {
+            Toast.makeText(this, "Lỗi: Không tìm thấy tài khoản!", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(this, LogIn.class));
+            finish();
+            return;
+        }
+
 
         btnSelectFile.setOnClickListener(v -> openFileChooser());
         btnSaveFile.setOnClickListener(v -> saveFileAsDocx());

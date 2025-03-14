@@ -1,6 +1,7 @@
 package com.example.readingapp.admin;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.readingapp.LogIn;
 import com.example.readingapp.R;
 import com.example.readingapp.dao.BookDAO;
 import com.example.readingapp.model.Book;
@@ -31,11 +33,25 @@ public class adminStory extends AppCompatActivity {
     private List<Story> storyList;
     private Button addStoryButton;
     private StoryAdapter storyAdapter;
+    private int accountId;
+    private SharedPreferences sharedPreferences;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_story);
+
+        sharedPreferences = getSharedPreferences("user_prefs", MODE_PRIVATE);
+        accountId = sharedPreferences.getInt("account_id", -1);
+
+        if (accountId == -1) {
+            Toast.makeText(this, "Lỗi: Không tìm thấy tài khoản!", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(this, LogIn.class));
+            finish();
+            return;
+        }
+
 
         recyclerView = findViewById(R.id.story_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));

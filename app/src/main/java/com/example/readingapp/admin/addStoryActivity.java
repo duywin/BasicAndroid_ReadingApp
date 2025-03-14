@@ -18,7 +18,9 @@ import android.widget.Toast;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import android.content.SharedPreferences;
 
+import com.example.readingapp.LogIn;
 import com.example.readingapp.R;
 import com.example.readingapp.dao.BookDAO;
 import com.example.readingapp.dao.GenreDAO;
@@ -38,6 +40,8 @@ public class addStoryActivity extends AppCompatActivity {
     private ImageView storyImagePreview;
     private Uri selectedImageUri;
     private int selectedGenreId = -1;
+    private int accountId;
+    private SharedPreferences sharedPreferences;
     private int bookId = -1; // Default -1 means adding a new book
     private String currentImagePath = null; // Store existing image path if editing
 
@@ -55,6 +59,17 @@ public class addStoryActivity extends AppCompatActivity {
         Button saveButton = findViewById(R.id.save_story_button);
 
         loadGenres();
+
+        // Retrieve account_id from SharedPreferences
+        sharedPreferences = getSharedPreferences("user_prefs", MODE_PRIVATE);
+        accountId = sharedPreferences.getInt("account_id", -1);
+
+        if (accountId == -1) {
+            Toast.makeText(this, "Lỗi: Không tìm thấy tài khoản!", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(this, LogIn.class));
+            finish();
+            return;
+        }
 
         // Check if editing
         bookId = getIntent().getIntExtra("BOOK_ID", -1);

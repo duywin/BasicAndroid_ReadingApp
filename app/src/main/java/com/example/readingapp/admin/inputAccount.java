@@ -1,6 +1,7 @@
 package com.example.readingapp.admin;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -11,6 +12,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.readingapp.LogIn;
 import com.example.readingapp.R;
 import com.example.readingapp.dao.AccountDAO;
 import com.example.readingapp.model.Account;
@@ -30,6 +32,10 @@ public class inputAccount extends AppCompatActivity {
     private AccountDAO accountDAO;
     private int accountId = -1; // Default: New account
 
+    private int logaccountId;
+    private SharedPreferences sharedPreferences;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,6 +52,16 @@ public class inputAccount extends AppCompatActivity {
         btnCancel = findViewById(R.id.btnCancel);
 
         accountDAO = new AccountDAO(this);
+
+        sharedPreferences = getSharedPreferences("user_prefs", MODE_PRIVATE);
+        logaccountId = sharedPreferences.getInt("account_id", -1);
+
+        if (logaccountId == -1) {
+            Toast.makeText(this, "Lỗi: Không tìm thấy tài khoản!", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(this, LogIn.class));
+            finish();
+            return;
+        }
 
         // Handle date picker for DOB
         etDob.setOnClickListener(v -> showDatePicker());

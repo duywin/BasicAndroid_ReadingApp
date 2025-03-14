@@ -1,6 +1,7 @@
 package com.example.readingapp.admin;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.readingapp.LogIn;
 import com.example.readingapp.R;
 import com.example.readingapp.dao.AccountDAO;
 import com.example.readingapp.model.Account;
@@ -27,6 +29,8 @@ public class adminAccount extends AppCompatActivity {
     private List<Account> accountList;
     private Button addAccountButton;
     private AccountAdapter accountAdapter;
+    private int logaccountId;
+    private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +42,16 @@ public class adminAccount extends AppCompatActivity {
 
         addAccountButton = findViewById(R.id.add_account_button);
         addAccountButton.setOnClickListener(v -> addNewAccount());
+
+        sharedPreferences = getSharedPreferences("user_prefs", MODE_PRIVATE);
+        logaccountId = sharedPreferences.getInt("account_id", -1);
+
+        if (logaccountId == -1) {
+            Toast.makeText(this, "Lỗi: Không tìm thấy tài khoản!", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(this, LogIn.class));
+            finish();
+            return;
+        }
 
         loadAccounts();
 

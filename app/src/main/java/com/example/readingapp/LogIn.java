@@ -2,6 +2,7 @@ package com.example.readingapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -53,18 +54,22 @@ public class LogIn extends AppCompatActivity {
         if (account != null) {
             showToast("Đăng nhập thành công");
 
-            // Determine next screen based on account type
+            // ✅ Save account ID in SharedPreferences
+            SharedPreferences sharedPreferences = getSharedPreferences("user_prefs", MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putInt("account_id", account.getId());
+            editor.apply();  // ✅ Save asynchronously
+
+            // ✅ Redirect to the correct screen
             Class<?> destinationClass = (account.getType() == 3) ? adminChart.class : userMain.class;
             Intent intent = new Intent(LogIn.this, destinationClass);
-
-            // Pass account ID as an extra
-            intent.putExtra("account_id", account.getId());
             startActivity(intent);
-            finish();
+            finish(); // Close login screen
         } else {
             showToast("Sai tên hoặc mật khẩu");
         }
     }
+
 
     private Account checkLogin(String username, String password) {
         SQLiteDatabase db = databaseHelper.getReadableDatabase();

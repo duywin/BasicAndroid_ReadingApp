@@ -3,6 +3,7 @@ package com.example.readingapp.admin;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -12,6 +13,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.readingapp.LogIn;
 import com.example.readingapp.R;
 import com.example.readingapp.dao.GenreDAO;
 import com.example.readingapp.model.Genre;
@@ -24,6 +26,10 @@ public class adminGenre extends AppCompatActivity {
     private TableLayout genreTable;
     private GenreDAO genreDAO;
 
+    private int accountId;
+    private SharedPreferences sharedPreferences;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,6 +39,17 @@ public class adminGenre extends AppCompatActivity {
         genreTable = findViewById(R.id.genre_table);
         Button addGenreButton = findViewById(R.id.add_genre_button);
         Button statsButton = findViewById(R.id.stats_button);
+
+        sharedPreferences = getSharedPreferences("user_prefs", MODE_PRIVATE);
+        accountId = sharedPreferences.getInt("account_id", -1);
+
+        if (accountId == -1) {
+            Toast.makeText(this, "Lỗi: Không tìm thấy tài khoản!", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(this, LogIn.class));
+            finish();
+            return;
+        }
+
 
         addGenreButton.setOnClickListener(v -> addGenre());
         statsButton.setOnClickListener(v -> updateAllGenres());
