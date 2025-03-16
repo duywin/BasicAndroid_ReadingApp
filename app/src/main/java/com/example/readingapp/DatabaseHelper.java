@@ -38,6 +38,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(ChapterDAO.CREATE_TABLE);
         db.execSQL(LogDAO.CREATE_TABLE);  // ✅ Add Logs table
 
+        preloadData(db);
         Log.d("DatabaseHelper", "All tables created successfully!");
     }
 

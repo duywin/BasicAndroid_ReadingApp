@@ -3,58 +3,72 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp"
     android:background="#F7F1E6"> <!-- Background Color -->
 
-    <!-- Title and Logout in a Horizontal Layout -->
-    <LinearLayout
+    <!-- Scrollable Content -->
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:paddingBottom="16dp">
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
 
-        <TextView
-            android:id="@+id/title_home"
-            android:layout_width="0dp"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Trang chủ"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:textColor="#6B4226"
-            android:layout_weight="1"
-            android:gravity="start"/>
+            android:orientation="vertical"
+            android:padding="16dp">
 
-        <Button
-            android:id="@+id/btn_logout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Đăng Xuất"
-            android:textAllCaps="false"
-            android:textColor="@android:color/white"
-            android:backgroundTint="#6B4226"
-            android:elevation="4dp"
-            android:padding="8dp"/>
-    </LinearLayout>
+            <!-- Title and Logout in a Horizontal Layout -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingBottom="16dp">
 
-    <!-- Bar Chart -->
-    <com.github.mikephil.charting.charts.BarChart
-        android:id="@+id/barChart"
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:background="@android:color/white"
-        android:elevation="4dp"/>
+                <TextView
+                    android:id="@+id/title_home"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="Trang chủ"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:textColor="#6B4226"
+                    android:layout_weight="1"
+                    android:gravity="start"/>
 
-    <!-- Pie Chart -->
-    <com.github.mikephil.charting.charts.PieChart
-        android:id="@+id/pieChart"
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:layout_marginTop="16dp"
-        android:background="@android:color/white"
-        android:elevation="4dp"/>
+                <Button
+                    android:id="@+id/btn_logout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Đăng Xuất"
+                    android:textAllCaps="false"
+                    android:textColor="@android:color/white"
+                    android:backgroundTint="#6B4226"
+                    android:elevation="4dp"
+                    android:padding="8dp"/>
+            </LinearLayout>
 
-    <!-- Bottom Navigation -->
+            <!-- Bar Chart -->
+            <com.github.mikephil.charting.charts.BarChart
+                android:id="@+id/barChart"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:background="@android:color/white"
+                android:elevation="4dp"/>
+
+            <!-- Pie Chart -->
+            <com.github.mikephil.charting.charts.PieChart
+                android:id="@+id/pieChart"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:layout_marginTop="16dp"
+                android:background="@android:color/white"
+                android:elevation="4dp"/>
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- Fixed Bottom Navigation -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/admin_bottom_navigation"
         android:layout_width="match_parent"
@@ -62,6 +76,5 @@
         app:menu="@menu/admin_bottom_menu"
         app:itemIconTint="@color/bottom_nav_background"
         app:itemTextColor="@color/bottom_nav_background"
-        app:labelVisibilityMode="labeled"
-        android:background="#6B4226"/>
+        app:labelVisibilityMode="labeled" />
 </LinearLayout>
