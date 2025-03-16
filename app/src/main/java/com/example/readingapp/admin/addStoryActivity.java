@@ -57,6 +57,7 @@ public class addStoryActivity extends AppCompatActivity {
         storyImagePreview = findViewById(R.id.story_image_preview);
         Button chooseImageButton = findViewById(R.id.choose_image_button);
         Button saveButton = findViewById(R.id.save_story_button);
+        Button backButton = findViewById(R.id.back_button);
 
         loadGenres();
 
@@ -79,6 +80,13 @@ public class addStoryActivity extends AppCompatActivity {
 
         chooseImageButton.setOnClickListener(v -> selectImage());
         saveButton.setOnClickListener(v -> saveStory());
+        backButton.setOnClickListener(v -> returnstorylist());
+    }
+
+    private void returnstorylist(){
+        Intent i = new Intent (addStoryActivity.this, adminStory.class);
+        startActivity(i);
+        finish();
     }
 
     private void loadGenres() {

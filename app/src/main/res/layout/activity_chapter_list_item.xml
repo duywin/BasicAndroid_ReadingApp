@@ -2,36 +2,49 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:padding="12dp"
     android:background="?attr/selectableItemBackground"
     android:clickable="true"
     android:focusable="true">
 
-    <!-- Chapter Name -->
-    <TextView
-        android:id="@+id/chapter_name"
-        android:layout_width="match_parent"
+    <!-- Chapter Details (Vertically stacked) -->
+    <LinearLayout
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:textColor="@android:color/black" />
+        android:layout_weight="1"
+        android:orientation="vertical">
 
-    <!-- Chapter Link (hidden or optional) -->
-    <TextView
-        android:id="@+id/chapter_link"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="14sp"
-        android:textColor="@android:color/darker_gray"
-        android:paddingTop="4dp"
-        android:visibility="gone" />
+        <!-- Chapter Name -->
+        <TextView
+            android:id="@+id/chapter_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="#6B4226"/> <!-- Themed color -->
+
+        <!-- Chapter Link (Hidden or optional) -->
+        <TextView
+            android:id="@+id/chapter_link"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:textColor="@android:color/darker_gray"
+            android:paddingTop="4dp"
+            android:visibility="gone"/>
+    </LinearLayout>
 
     <!-- Delete Button -->
     <Button
         android:id="@+id/btn_delete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Delete"
-        android:layout_marginTop="8dp"/> <!-- No more android:visibility="gone" -->
+        android:text="Xóa"
+        android:textAllCaps="false"
+        android:textColor="@android:color/white"
+        android:backgroundTint="#6B4226"
+        android:elevation="4dp"
+        android:padding="8dp"
+        android:layout_marginStart="12dp"/>
 </LinearLayout>

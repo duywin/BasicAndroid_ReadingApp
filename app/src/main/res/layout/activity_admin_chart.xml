@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:background="#F7F1E6"> <!-- Background Color -->
 
     <!-- Title and Logout in a Horizontal Layout -->
     <LinearLayout
@@ -20,7 +21,7 @@
             android:text="Trang chủ"
             android:textSize="24sp"
             android:textStyle="bold"
-            android:textColor="@android:color/black"
+            android:textColor="#6B4226"
             android:layout_weight="1"
             android:gravity="start"/>
 
@@ -29,22 +30,29 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Đăng Xuất"
-            android:backgroundTint="@color/design_default_color_primary"
-            android:textColor="@android:color/white"/>
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
+            android:backgroundTint="#6B4226"
+            android:elevation="4dp"
+            android:padding="8dp"/>
     </LinearLayout>
 
     <!-- Bar Chart -->
     <com.github.mikephil.charting.charts.BarChart
         android:id="@+id/barChart"
         android:layout_width="match_parent"
-        android:layout_height="300dp" />
+        android:layout_height="300dp"
+        android:background="@android:color/white"
+        android:elevation="4dp"/>
 
     <!-- Pie Chart -->
     <com.github.mikephil.charting.charts.PieChart
         android:id="@+id/pieChart"
         android:layout_width="match_parent"
         android:layout_height="300dp"
-        android:layout_marginTop="16dp"/>
+        android:layout_marginTop="16dp"
+        android:background="@android:color/white"
+        android:elevation="4dp"/>
 
     <!-- Bottom Navigation -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -54,5 +62,6 @@
         app:menu="@menu/admin_bottom_menu"
         app:itemIconTint="@color/bottom_nav_background"
         app:itemTextColor="@color/bottom_nav_background"
-        app:labelVisibilityMode="labeled"/>
+        app:labelVisibilityMode="labeled"
+        android:background="#6B4226"/>
 </LinearLayout>

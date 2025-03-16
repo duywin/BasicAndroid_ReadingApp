@@ -1,77 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="20dp"
+    android:gravity="top"
+    android:background="#F7F1E6">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <!-- Back Button & Title -->
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Thêm Truyện Mới"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:layout_gravity="center_horizontal"
-        android:paddingBottom="10dp"/>
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
 
+        <Button
+            android:id="@+id/back_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="← Quay lại"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
+            android:backgroundTint="#6B4226"
+            android:padding="8dp"
+            android:elevation="4dp"
+            android:layout_marginEnd="12dp"/>
+
+        <TextView
+            android:id="@+id/chapter_list_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Thêm Truyện Mới"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="#6B4226"/>
+    </LinearLayout>
+
+    <!-- Title Input -->
     <EditText
         android:id="@+id/story_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Nhập tiêu đề truyện"/>
+        android:hint="Nhập tiêu đề truyện"
+        android:background="@android:drawable/edit_text"
+        android:padding="12dp"
+        android:layout_marginTop="12dp"/>
 
+    <!-- Author Input -->
     <EditText
         android:id="@+id/story_author"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Nhập tên tác giả"/>
+        android:hint="Nhập tên tác giả"
+        android:background="@android:drawable/edit_text"
+        android:padding="12dp"
+        android:layout_marginTop="12dp"/>
 
+    <!-- Description Input -->
     <EditText
         android:id="@+id/story_description"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="120dp"
         android:hint="Nhập mô tả truyện"
-        android:minHeight="100dp"
         android:gravity="top"
-        android:inputType="textMultiLine"/>
+        android:inputType="textMultiLine"
+        android:background="@android:drawable/edit_text"
+        android:padding="12dp"
+        android:layout_marginTop="12dp"/>
 
+    <!-- Genre Label -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Thể loại"
         android:textSize="16sp"
-        android:paddingTop="8dp"/>
+        android:textStyle="bold"
+        android:textColor="#6B4226"
+        android:layout_marginTop="12dp"/>
 
+    <!-- Genre Spinner -->
     <Spinner
         android:id="@+id/story_genre"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"/>
 
+    <!-- Cover Image Label -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Ảnh bìa truyện"
         android:textSize="16sp"
-        android:paddingTop="8dp"/>
+        android:textStyle="bold"
+        android:textColor="#6B4226"
+        android:layout_marginTop="12dp"/>
 
-    <ImageView
-        android:id="@+id/story_image_preview"
-        android:layout_width="150dp"
-        android:layout_height="200dp"
-        android:layout_gravity="center"
-        android:scaleType="centerCrop"
-        android:background="@android:color/darker_gray"/>
-
-    <Button
-        android:id="@+id/choose_image_button"
-        android:layout_width="wrap_content"
+    <!-- Image Preview & Upload Button -->
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Chọn ảnh"
-        android:layout_gravity="center"/>
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="8dp">
 
+        <ImageView
+            android:id="@+id/story_image_preview"
+            android:layout_width="120dp"
+            android:layout_height="150dp"
+            android:scaleType="centerCrop"
+            android:background="@android:color/darker_gray"
+            android:padding="4dp"
+            android:layout_marginBottom="8dp"/>
+
+        <Button
+            android:id="@+id/choose_image_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tải ảnh lên"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
+            android:backgroundTint="#A97155"
+            android:elevation="4dp"/>
+    </LinearLayout>
+
+    <!-- Save Story Button -->
     <Button
         android:id="@+id/save_story_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Lưu Truyện"
-        android:layout_marginTop="10dp"/>
+        android:textAllCaps="false"
+        android:textColor="@android:color/white"
+        android:backgroundTint="#6B4226"
+        android:elevation="4dp"
+        android:layout_marginTop="16dp"/>
 </LinearLayout>

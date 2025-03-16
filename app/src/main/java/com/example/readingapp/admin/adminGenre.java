@@ -4,7 +4,9 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -25,10 +27,8 @@ public class adminGenre extends AppCompatActivity {
 
     private TableLayout genreTable;
     private GenreDAO genreDAO;
-
     private int accountId;
     private SharedPreferences sharedPreferences;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +49,6 @@ public class adminGenre extends AppCompatActivity {
             finish();
             return;
         }
-
 
         addGenreButton.setOnClickListener(v -> addGenre());
         statsButton.setOnClickListener(v -> updateAllGenres());
@@ -77,11 +76,13 @@ public class adminGenre extends AppCompatActivity {
             row.addView(createTextView(String.valueOf(genre.getTotalBooks()), false));
 
             ImageButton deleteButton = new ImageButton(this);
-            deleteButton.setImageResource(R.drawable.delete_icon); // Use your delete icon
+            deleteButton.setImageResource(R.drawable.delete_icon); // Replace with actual delete icon
             deleteButton.setBackground(null); // Remove background for a cleaner look
-            TableRow.LayoutParams params = new TableRow.LayoutParams(120, 120); // 16dp (48px) in pixels
+            deleteButton.setPadding(10, 10, 10, 10);
+
+            TableRow.LayoutParams params = new TableRow.LayoutParams(100, 100);
+            params.setMargins(16, 8, 16, 8);
             deleteButton.setLayoutParams(params);
-            deleteButton.setPadding(4, 4, 4, 4);
             deleteButton.setOnClickListener(v -> deleteGenre(genre.getId()));
 
             row.addView(deleteButton);
@@ -93,7 +94,13 @@ public class adminGenre extends AppCompatActivity {
         TextView textView = new TextView(this);
         textView.setText(text);
         textView.setPadding(16, 16, 16, 16);
-        if (isHeader) textView.setTextSize(16);
+        textView.setGravity(Gravity.CENTER);
+        if (isHeader) {
+            textView.setTypeface(null, Typeface.BOLD);
+            textView.setTextSize(16);
+        } else {
+            textView.setTextSize(14);
+        }
         return textView;
     }
 
@@ -101,13 +108,11 @@ public class adminGenre extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Thêm thể loại");
 
-        // Create an input field
         final EditText input = new EditText(this);
         input.setHint("Nhập tên thể loại");
-        input.setPadding(40, 20, 40, 20);
+        input.setPadding(50, 30, 50, 30);
         builder.setView(input);
 
-        // Add buttons
         builder.setPositiveButton("Thêm", (dialog, which) -> {
             String genreName = input.getText().toString().trim();
             if (!genreName.isEmpty()) {
@@ -126,7 +131,6 @@ public class adminGenre extends AppCompatActivity {
         builder.show();
     }
 
-
     private void deleteGenre(int genreId) {
         if (genreDAO.deleteGenre(genreId)) {
             Toast.makeText(this, "Xóa thể loại thành công", Toast.LENGTH_SHORT).show();
@@ -144,7 +148,6 @@ public class adminGenre extends AppCompatActivity {
         Toast.makeText(this, "Cập nhật tổng số sách hoàn tất", Toast.LENGTH_SHORT).show();
         loadGenres();
     }
-
 
     private void setupBottomNavigation() {
         BottomNavigationView bottomNavigationView = findViewById(R.id.admin_bottom_navigation);

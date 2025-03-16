@@ -40,6 +40,7 @@ public class UploadChapterActivity extends AppCompatActivity {
         chapterNameInput = findViewById(R.id.chapter_name_input);
         btnSelectFile = findViewById(R.id.btn_select_file);
         btnSaveFile = findViewById(R.id.btn_save_file);
+        Button backButton = findViewById(R.id.back_button);
         chapterDAO = new ChapterDAO(this);
 
         bookId = getIntent().getIntExtra("BOOK_ID", -1);
@@ -61,8 +62,14 @@ public class UploadChapterActivity extends AppCompatActivity {
 
         btnSelectFile.setOnClickListener(v -> openFileChooser());
         btnSaveFile.setOnClickListener(v -> saveFileAsDocx());
+        backButton.setOnClickListener(v -> ReturnChapter());
     }
 
+    private void ReturnChapter(){
+        Intent i = new Intent (UploadChapterActivity.this, adminChapter.class);
+        startActivity(i);
+        finish();
+    }
     private void openFileChooser() {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("*/*");

@@ -3,8 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:padding="10dp"
+    android:padding="12dp"
     android:background="@android:color/white"
+    android:elevation="4dp"
     android:weightSum="2">
 
     <!-- Left Column: Account Details -->
@@ -13,7 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:orientation="vertical"
-        android:paddingEnd="10dp">
+        android:paddingEnd="12dp">
 
         <TextView
             android:id="@+id/account_username"
@@ -56,15 +57,23 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Sửa"
-            android:padding="5dp"/>
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
+            android:backgroundTint="#6B4226"
+            android:elevation="4dp"
+            android:padding="8dp"
+            android:layout_marginBottom="8dp"/>
 
         <Button
             android:id="@+id/delete_account_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Xóa"
-            android:padding="5dp"
-            android:layout_marginTop="10dp"/>
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
+            android:backgroundTint="#A97155"
+            android:elevation="4dp"
+            android:padding="8dp"/>
     </LinearLayout>
 
 </LinearLayout>

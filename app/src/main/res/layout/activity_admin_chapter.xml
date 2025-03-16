@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:background="#F7F1E6">
 
     <!-- Row 1: Title & Back Button -->
     <LinearLayout
@@ -17,7 +18,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Back"
-            android:padding="8dp"/>
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
+            android:backgroundTint="#6B4226"
+            android:elevation="4dp"
+            android:padding="8dp"
+            android:layout_marginEnd="8dp"/>
 
         <TextView
             android:id="@+id/chapter_list_title"
@@ -26,8 +32,10 @@
             android:text="Manage Chapters"
             android:textSize="20sp"
             android:textStyle="bold"
+            android:textColor="#6B4226"
             android:gravity="center"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            android:paddingBottom="8dp"/>
     </LinearLayout>
 
     <!-- Row 2: Write & Upload Buttons -->
@@ -43,7 +51,11 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Write Chapter"
-            android:padding="8dp"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
+            android:backgroundTint="#6B4226"
+            android:elevation="4dp"
+            android:padding="12dp"
             android:layout_weight="1"
             android:layout_marginEnd="8dp"/>
 
@@ -52,7 +64,11 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Upload Chapter"
-            android:padding="8dp"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
+            android:backgroundTint="#6B4226"
+            android:elevation="4dp"
+            android:padding="12dp"
             android:layout_weight="1"/>
     </LinearLayout>
 

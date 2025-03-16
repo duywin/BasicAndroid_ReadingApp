@@ -1,12 +1,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:padding="16dp"
-    android:background="#f5f5f5"
+    android:background="#F7F1E6"
     android:gravity="center_horizontal">
 
+    <!-- Title -->
     <TextView
         android:id="@+id/tvTitle"
         android:layout_width="wrap_content"
@@ -14,16 +15,23 @@
         android:text="Quản lý Truyện"
         android:textSize="24sp"
         android:textStyle="bold"
+        android:textColor="#6B4226"
         android:paddingBottom="10dp"/>
 
+    <!-- Add Story Button -->
     <Button
         android:id="@+id/add_story_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Thêm Truyện"
+        android:textAllCaps="false"
+        android:textColor="@android:color/white"
+        android:backgroundTint="#6B4226"
+        android:elevation="4dp"
         android:padding="8dp"
         android:layout_marginBottom="10dp"/>
 
+    <!-- RecyclerView for Story List -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/story_recycler_view"
         android:layout_width="match_parent"
@@ -31,6 +39,7 @@
         android:layout_weight="1"
         android:scrollbars="vertical"/>
 
+    <!-- Bottom Navigation -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/admin_bottom_navigation"
         android:layout_width="match_parent"

@@ -91,47 +91,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_margin="8dp"/>
 
-    <!-- Menu điều hướng -->
-    <LinearLayout
-        android:id="@+id/menuBar"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/user_bottom_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:background="#FAF3E0"
-        android:orientation="horizontal"
-        android:gravity="center"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <TextView
-            android:id="@+id/menuHome"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Trang chủ"
-            android:textColor="@android:color/black"
-            android:textStyle="bold"
-            android:padding="8dp"
-            android:background="?attr/selectableItemBackground"/>
-
-        <TextView
-            android:id="@+id/menuCategories"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Thể loại"
-            android:textColor="@android:color/black"
-            android:textStyle="bold"
-            android:padding="8dp"
-            android:background="?attr/selectableItemBackground"/>
-
-        <TextView
-            android:id="@+id/menuSettings"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Cài đặt"
-            android:textColor="@android:color/black"
-            android:textStyle="bold"
-            android:padding="8dp"
-            android:background="?attr/selectableItemBackground"/>
-    </LinearLayout>
+        app:menu="@menu/user_bottom_menu"
+        app:itemIconTint="@color/bottom_nav_background"
+        app:itemTextColor="@color/bottom_nav_background"
+        app:labelVisibilityMode="labeled"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
