@@ -154,9 +154,9 @@ public class adminStory extends AppCompatActivity {
         @Override
         public void onBindViewHolder(@NonNull StoryViewHolder holder, int position) {
             Story story = stories.get(position);
-            holder.storyTitle.setText(story.title);
+            holder.storyTitle.setText("Tên truyện" + story.title);
             holder.storyAuthor.setText("Tác giả: " + story.author);
-            holder.storyDescription.setText(story.description);
+            holder.storyDescription.setText("Mô tả"+ story.description);
 
             // Load image correctly from internal storage or assets
             File internalImage = new File(getFilesDir(), "books/" + story.imageUrl);

@@ -21,7 +21,6 @@
         android:layout_weight="1"
         android:orientation="vertical">
 
-
         <TextView
             android:id="@+id/story_title"
             android:layout_width="wrap_content"
@@ -52,7 +51,7 @@
             android:textColor="@android:color/black"
             android:paddingTop="2dp"/>
 
-        <!-- Bottom Row: Buttons (Edit & Delete side by side) -->
+        <!-- Bottom Row: Favorite Button -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -60,28 +59,14 @@
             android:gravity="end"
             android:layout_marginTop="8dp">
 
-            <Button
-                android:id="@+id/edit_story_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Sửa"
-                android:textAllCaps="false"
-                android:textColor="@android:color/white"
-                android:backgroundTint="#6B4226"
-                android:elevation="4dp"
-                android:padding="8dp"
-                android:layout_marginEnd="8dp"/>
-
-            <Button
-                android:id="@+id/delete_story_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Xóa"
-                android:textAllCaps="false"
-                android:textColor="@android:color/white"
-                android:backgroundTint="#6B4226"
-                android:elevation="4dp"
-                android:padding="8dp"/>
+            <ImageButton
+                android:id="@+id/favorite_button"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:scaleType="centerInside"
+                android:src="@drawable/unfavorite"
+                android:contentDescription="Favorite Button"/>
         </LinearLayout>
 
     </LinearLayout>
