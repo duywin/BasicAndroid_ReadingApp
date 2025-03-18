@@ -63,14 +63,13 @@ public class ChapterDAO {
     private String findChapterFile(String link) {
         File internalFile = new File(context.getFilesDir(), "chapters/" + link);
 
-        // ✅ Check if the file exists in internal storage
+        // ✅ Check if file exists in internal storage
         if (internalFile.exists() && internalFile.isFile()) {
             Log.d("ChapterDAO", "Found chapter in internal storage: " + internalFile.getAbsolutePath());
-            return internalFile.getAbsolutePath();  // ✅ Return absolute path for internal storage
+            return internalFile.getAbsolutePath();  // ✅ Return full path for internal storage
         }
 
-        // ✅ If the file is in assets
-        String assetPath = "file:///android_asset/chapters/" + link;
+        // ✅ Check if file exists in assets
         AssetManager assetManager = context.getAssets();
         try {
             String[] files = assetManager.list("chapters");
@@ -78,7 +77,7 @@ public class ChapterDAO {
                 for (String file : files) {
                     if (file.equals(link)) {
                         Log.d("ChapterDAO", "Found chapter in assets: " + file);
-                        return assetPath;  // ✅ Correct assets path format
+                        return "chapters/" + file;  // ✅ Only return relative path
                     }
                 }
             }
@@ -87,8 +86,9 @@ public class ChapterDAO {
         }
 
         Log.w("ChapterDAO", "Chapter file not found: " + link);
-        return link; // ⛔ If not found, return as-is (which might cause errors!)
+        return null; // Return null if the file is not found
     }
+
 
     public boolean insertChapter(String chapterName, int bookId, String filePath) {
         ContentValues values = new ContentValues();

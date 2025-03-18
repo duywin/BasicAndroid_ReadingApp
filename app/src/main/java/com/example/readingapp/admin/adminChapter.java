@@ -62,16 +62,15 @@ public class adminChapter extends AppCompatActivity {
             return;
         }
 
-
         btnWriteChapter.setOnClickListener(v -> {
             Intent intent = new Intent(adminChapter.this, WriteChapterActivity.class);
-            intent.putExtra("BOOK_ID", bookId);  // ✅ Pass book ID
+            intent.putExtra("BOOK_ID", bookId);
             startActivity(intent);
         });
 
         btnUploadChapter.setOnClickListener(v -> {
             Intent intent = new Intent(adminChapter.this, UploadChapterActivity.class);
-            intent.putExtra("BOOK_ID", bookId);  // ✅ Pass book ID
+            intent.putExtra("BOOK_ID", bookId);
             startActivity(intent);
         });
 
