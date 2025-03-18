@@ -1,23 +1,34 @@
 package com.example.readingapp;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.readingapp.R;
 import com.example.readingapp.model.Genre;
 
 import java.util.List;
+import java.util.Random;
 
 public class GenreAdapter extends RecyclerView.Adapter<GenreAdapter.GenreViewHolder> {
-    private List<Genre> genres;
-    private Context context;
-    private OnGenreClickListener listener;
+    private final List<Genre> genres;
+    private final Context context;
+    private final OnGenreClickListener listener;
+    private final int[] colors = {
+            Color.parseColor("#FF5733"), // Red
+            Color.parseColor("#33FF57"), // Green
+            Color.parseColor("#3357FF"), // Blue
+            Color.parseColor("#F1C40F"), // Yellow
+            Color.parseColor("#9B59B6"), // Purple
+            Color.parseColor("#E74C3C"), // Dark Red
+            Color.parseColor("#2ECC71"), // Bright Green
+            Color.parseColor("#3498DB")  // Sky Blue
+    };
 
     public interface OnGenreClickListener {
         void onGenreClick(Genre genre);
@@ -39,14 +50,9 @@ public class GenreAdapter extends RecyclerView.Adapter<GenreAdapter.GenreViewHol
     @Override
     public void onBindViewHolder(@NonNull GenreViewHolder holder, int position) {
         Genre genre = genres.get(position);
-        holder.genreName.setText(genre.getName());
-
-        // Handle click event
-        holder.itemView.setOnClickListener(v -> {
-            if (listener != null) {
-                listener.onGenreClick(genre);
-            }
-        });
+        holder.btnGenre.setText(genre.getName());
+        holder.btnGenre.setBackgroundColor(colors[new Random().nextInt(colors.length)]);
+        holder.btnGenre.setOnClickListener(v -> listener.onGenreClick(genre));
     }
 
     @Override
@@ -55,11 +61,11 @@ public class GenreAdapter extends RecyclerView.Adapter<GenreAdapter.GenreViewHol
     }
 
     static class GenreViewHolder extends RecyclerView.ViewHolder {
-        TextView genreName;
+        Button btnGenre;
 
         public GenreViewHolder(@NonNull View itemView) {
             super(itemView);
-            genreName = itemView.findViewById(R.id.genreName);
+            btnGenre = itemView.findViewById(R.id.btnGenre);
         }
     }
 }

@@ -1,59 +1,59 @@
 package com.example.readingapp;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import androidx.annotation.NonNull;
-import androidx.viewpager.widget.PagerAdapter;
-
 import com.bumptech.glide.Glide;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 import com.example.readingapp.model.Book;
-
+import java.io.File;
 import java.util.List;
 
-public class BookCarouselAdapter extends PagerAdapter {
-    private Context context;
+public class BookCarouselAdapter extends RecyclerView.Adapter<BookCarouselAdapter.ViewHolder> {
     private List<Book> books;
 
-    public BookCarouselAdapter(Context context, List<Book> books) {
-        this.context = context;
+    public BookCarouselAdapter(List<Book> books) {
         this.books = books;
-    }
-
-    @Override
-    public int getCount() {
-        return books.size();
-    }
-
-    @Override
-    public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
-        return view == object;
     }
 
     @NonNull
     @Override
-    public Object instantiateItem(@NonNull ViewGroup container, int position) {
-        View view = LayoutInflater.from(context).inflate(R.layout.carousel_item, container, false);
-
-        ImageView bookImage = view.findViewById(R.id.bookImage);
-        TextView bookTitle = view.findViewById(R.id.bookTitle);
-
-        Book book = books.get(position);
-        bookTitle.setText(book.getTitle());
-
-        // Load image using Glide
-        Glide.with(context).load(book.getImageLink()).into(bookImage);
-
-        container.addView(view);
-        return view;
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.carousel_item, parent, false);
+        return new ViewHolder(view);
     }
 
     @Override
-    public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
-        container.removeView((View) object);
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        Book book = books.get(position);
+        holder.bookTitle.setText(book.getTitle());
+
+        // Load image correctly from internal storage or assets
+        File internalImage = new File(holder.itemView.getContext().getFilesDir(), "books/" + book.getImageLink());
+        if (internalImage.exists()) {
+            Glide.with(holder.itemView.getContext()).load(internalImage).into(holder.bookImage);
+        } else {
+            String assetPath = "file:///android_asset/books/" + book.getImageLink();
+            Glide.with(holder.itemView.getContext()).load(assetPath).into(holder.bookImage);
+        }
+    }
+
+    @Override
+    public int getItemCount() {
+        return books.size();
+    }
+
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        ImageView bookImage;
+        TextView bookTitle;
+
+        public ViewHolder(@NonNull View itemView) {
+            super(itemView);
+            bookImage = itemView.findViewById(R.id.bookImage);
+            bookTitle = itemView.findViewById(R.id.bookTitle);
+        }
     }
 }

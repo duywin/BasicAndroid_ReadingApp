@@ -1,19 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
+<Button xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/btnGenre"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="8dp"
-    android:orientation="horizontal"
-    android:background="@drawable/genre_background"
-    android:clickable="true"
-    android:focusable="true">
-
-    <TextView
-        android:id="@+id/genreName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:textColor="@android:color/black"
-        android:padding="8dp"/>
-</LinearLayout>
+    android:textSize="14sp"
+    android:textColor="@android:color/white"
+    android:padding="12dp"
+    android:background="@android:color/holo_blue_dark"/>

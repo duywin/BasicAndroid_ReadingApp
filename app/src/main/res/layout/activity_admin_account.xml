@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="#F7F1E6"
+    android:orientation="vertical"
     android:padding="16dp">
 
     <!-- Title -->
@@ -12,27 +12,27 @@
         android:id="@+id/tvTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Quản lý Tài Khoản"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:textColor="#6B4226"
-        android:gravity="center"
         android:layout_gravity="center_horizontal"
-        android:paddingBottom="10dp"/>
+        android:gravity="center"
+        android:paddingBottom="10dp"
+        android:text="Quản lý Tài Khoản"
+        android:textColor="#6B4226"
+        android:textSize="24sp"
+        android:textStyle="bold" />
 
     <!-- Add Account Button -->
     <Button
         android:id="@+id/add_account_button"
         android:layout_width="175dp"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:backgroundTint="#8D5A2B"
+        android:elevation="4dp"
+        android:padding="12dp"
         android:text="Thêm Tài Khoản"
         android:textAllCaps="false"
-        android:textColor="@android:color/white"
-        android:backgroundTint="#6B4226"
-        android:elevation="4dp"
-        android:layout_marginTop="10dp"
-        android:padding="12dp"
-        android:layout_gravity="center_horizontal"/>
+        android:textColor="#FFF7E6" />
 
     <!-- Scrollable RecyclerView -->
     <androidx.core.widget.NestedScrollView
@@ -45,7 +45,7 @@
             android:id="@+id/account_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:scrollbars="vertical"/>
+            android:scrollbars="vertical" />
     </androidx.core.widget.NestedScrollView>
 
     <!-- Bottom Navigation -->
@@ -53,8 +53,9 @@
         android:id="@+id/admin_bottom_navigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:menu="@menu/admin_bottom_menu"
+        android:background="#FFFFFF"
         app:itemIconTint="@color/bottom_nav_background"
         app:itemTextColor="@color/bottom_nav_background"
-        app:labelVisibilityMode="labeled"/>
+        app:labelVisibilityMode="labeled"
+        app:menu="@menu/admin_bottom_menu" />
 </LinearLayout>

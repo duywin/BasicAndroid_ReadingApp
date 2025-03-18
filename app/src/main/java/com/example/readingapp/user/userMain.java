@@ -3,14 +3,15 @@ package com.example.readingapp.user;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.ViewPager;
+import androidx.recyclerview.widget.PagerSnapHelper;
+import androidx.recyclerview.widget.SnapHelper;
 
 import com.example.readingapp.LogIn;
 import com.example.readingapp.R;
@@ -28,7 +29,7 @@ import java.util.List;
 public class userMain extends AppCompatActivity {
     private SharedPreferences sharedPreferences;
     private int accountId;
-    private ViewPager hotBooksCarousel;
+    private RecyclerView hotBooksCarousel;
     private RecyclerView categoryList;
     private Button btnLogout;
     private BookDAO bookDAO;
@@ -77,6 +78,7 @@ public class userMain extends AppCompatActivity {
                 case R.id.nav_user_search:
                     return true;
                 case R.id.nav_user_favorite:
+                    startActivity(new Intent(userMain.this, userFavorite.class));
                     return true;
                 case R.id.nav_user_profile:
                     return true;
@@ -87,13 +89,24 @@ public class userMain extends AppCompatActivity {
 
     private void loadRecommendedBooks() {
         List<Book> books = bookDAO.getAllBooks();
-        Collections.shuffle(books); // Shuffle to get random books
+        Collections.shuffle(books);
         if (books.size() > 5) {
-            books = books.subList(0, 5); // Take only 5 books
+            books = books.subList(0, 5);
         }
-        BookCarouselAdapter adapter = new BookCarouselAdapter(this, books);
+
+        BookCarouselAdapter adapter = new BookCarouselAdapter(books);
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        hotBooksCarousel.setLayoutManager(layoutManager);
         hotBooksCarousel.setAdapter(adapter);
+
+        // Attach SnapHelper for smooth snapping
+        SnapHelper snapHelper = new PagerSnapHelper(); // You can also use LinearSnapHelper
+        snapHelper.attachToRecyclerView(hotBooksCarousel);
     }
+
+
+
 
     private void loadGenres() {
         List<Genre> genres = genreDAO.getAllGenres();
@@ -102,9 +115,11 @@ public class userMain extends AppCompatActivity {
             // TODO: Implement navigation to books of selected genre
         });
 
-        categoryList.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        // Use GridLayoutManager with 2 columns
+        categoryList.setLayoutManager(new GridLayoutManager(this, 2));
         categoryList.setAdapter(adapter);
     }
+
 
 
     private void logout() {
