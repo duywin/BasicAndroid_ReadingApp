@@ -26,12 +26,12 @@
     }
   ],
   "genres": [
-    { "name": "Fiction", "total_books": 0 },
-    { "name": "Non-Fiction", "total_books": 0 },
-    { "name": "Sci-Fi", "total_books": 0 },
+    { "name": "Fiction", "total_books": 2 },
+    { "name": "Non-Fiction", "total_books": 1 },
+    { "name": "Sci-Fi", "total_books": 2 },
     { "name": "Fantasy", "total_books": 2 },
-    { "name": "Horror", "total_books": 0 },
-    { "name": "Collection", "total_books": 0 }
+    { "name": "Horror", "total_books": 2 },
+    { "name": "Collection", "total_books": 1 }
   ],
   "books": [
     {
@@ -47,6 +47,62 @@
       "description": "Second part of the edition",
       "image_link": "book2.png",
       "genre_id": 4
+    },
+    {
+      "title": "Dune",
+      "author": "Frank Herbert",
+      "description": "A sci-fi epic about politics, religion, and survival on a desert planet.",
+      "image_link": "book3.png",
+      "genre_id": 3
+    },
+    {
+      "title": "Foundation",
+      "author": "Isaac Asimov",
+      "description": "A visionary saga about the rise and fall of civilizations.",
+      "image_link": "book4.png",
+      "genre_id": 3
+    },
+    {
+      "title": "To Kill a Mockingbird",
+      "author": "Harper Lee",
+      "description": "A profound novel on race, justice, and morality in the American South.",
+      "image_link": "book5.png",
+      "genre_id": 1
+    },
+    {
+      "title": "Dracula",
+      "author": "Bram Stoker",
+      "description": "The legendary vampire story that defined the genre.",
+      "image_link": "book6.png",
+      "genre_id": 5
+    },
+    {
+      "title": "The Shining",
+      "author": "Stephen King",
+      "description": "A chilling tale of a haunted hotel and a man's descent into madness.",
+      "image_link": "book7.png",
+      "genre_id": 5
+    },
+    {
+      "title": "The Hobbit",
+      "author": "J.R.R. Tolkien",
+      "description": "A fantasy adventure of Bilbo Baggins and the quest for the Lonely Mountain.",
+      "image_link": "book8.png",
+      "genre_id": 4
+    },
+    {
+      "title": "Sapiens: A Brief History of Humankind",
+      "author": "Yuval Noah Harari",
+      "description": "A fascinating exploration of human history and civilization.",
+      "image_link": "book9.png",
+      "genre_id": 2
+    },
+    {
+      "title": "Sherlock Holmes: The final problem",
+      "author": "Arthur Conan Doyle",
+      "description": "A collection of classic detective stories featuring Sherlock Holmes.",
+      "image_link": "book10.png",
+      "genre_id": 6
     }
   ],
   "chapters": [
