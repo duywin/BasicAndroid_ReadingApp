@@ -50,6 +50,14 @@ public class FavoriteDAO {
         return db.insert(TABLE_NAME, null, values) != -1;
     }
 
+    public boolean isBookFavorite(int bookId) {
+        String query = "SELECT * FROM Favorites WHERE book_id = ?";
+        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(bookId)});
+        boolean isFavorite = cursor.moveToFirst(); // True if a record exists
+        cursor.close();
+        return isFavorite;
+    }
+
     // Remove book from favorites
     public boolean removeFavorite(int accountId, int bookId) {
         return db.delete(TABLE_NAME, "account_id = ? AND book_id = ?",

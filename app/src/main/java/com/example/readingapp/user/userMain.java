@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -35,12 +37,15 @@ public class userMain extends AppCompatActivity {
     private BookDAO bookDAO;
     private GenreDAO genreDAO;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_main);
 
         // Initialize UI elements
+        EditText searchBox = findViewById(R.id.searchBox);
+        ImageView searchButton = findViewById(R.id.searchButton);
         hotBooksCarousel = findViewById(R.id.hotBooksCarousel);
         categoryList = findViewById(R.id.categoryList);
         btnLogout = findViewById(R.id.btnLogout);
@@ -70,12 +75,25 @@ public class userMain extends AppCompatActivity {
         // Set up logout button
         btnLogout.setOnClickListener(v -> logout());
 
+        searchButton.setOnClickListener(v -> {
+            String query = searchBox.getText().toString().trim();
+            if (!query.isEmpty()) {
+                Intent intent = new Intent(userMain.this, userSearch.class);
+                intent.putExtra("search_query", query);
+                startActivity(intent);
+            } else {
+                Toast.makeText(this, "Vui lòng nhập từ khóa tìm kiếm", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
         // Handle bottom navigation (you can add actual navigation logic here)
         bottomNavigationView.setOnItemSelectedListener(item -> {
             switch (item.getItemId()) {
                 case R.id.nav_user_main:
                     return true;
                 case R.id.nav_user_search:
+                    startActivity(new Intent(userMain.this, userSearch.class));
                     return true;
                 case R.id.nav_user_favorite:
                     startActivity(new Intent(userMain.this, userFavorite.class));

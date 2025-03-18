@@ -1,6 +1,7 @@
 package com.example.readingapp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.readingapp.model.Genre;
+import com.example.readingapp.user.userSearch;
 
 import java.util.List;
 import java.util.Random;
@@ -52,7 +54,11 @@ public class GenreAdapter extends RecyclerView.Adapter<GenreAdapter.GenreViewHol
         Genre genre = genres.get(position);
         holder.btnGenre.setText(genre.getName());
         holder.btnGenre.setBackgroundColor(colors[new Random().nextInt(colors.length)]);
-        holder.btnGenre.setOnClickListener(v -> listener.onGenreClick(genre));
+        holder.btnGenre.setOnClickListener(v -> {
+            Intent intent = new Intent(context, userSearch.class);
+            intent.putExtra("genre_id", genre.getId());
+            context.startActivity(intent);
+        });
     }
 
     @Override

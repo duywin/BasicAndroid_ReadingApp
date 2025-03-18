@@ -67,6 +67,32 @@ public class BookDAO {
         cursor.close();
         return books;
     }
+    public List<Book> searchBooksByTitle(String title) {
+        List<Book> bookList = new ArrayList<>();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE title LIKE ?", new String[]{"%" + title + "%"});
+
+        if (cursor.moveToFirst()) {
+            do {
+                bookList.add(cursorToBook(cursor));
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        return bookList;
+    }
+
+    public List<Book> getBooksByGenre(int genreId) {
+        List<Book> bookList = new ArrayList<>();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE genre_id = ?", new String[]{String.valueOf(genreId)});
+
+        if (cursor.moveToFirst()) {
+            do {
+                bookList.add(cursorToBook(cursor));
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        return bookList;
+    }
+
 
     public boolean editBook(int id, String title, String author, String description, String image_link, int genreId) {
         ContentValues values = new ContentValues();
@@ -98,5 +124,15 @@ public class BookDAO {
     }
     public boolean deleteBook(int id) {
         return db.delete(TABLE_NAME, "id = ?", new String[]{String.valueOf(id)}) > 0;
+    }
+    private Book cursorToBook(Cursor cursor) {
+        return new Book(
+                cursor.getInt(cursor.getColumnIndexOrThrow("id")),
+                cursor.getString(cursor.getColumnIndexOrThrow("title")),
+                cursor.getString(cursor.getColumnIndexOrThrow("author")),
+                cursor.getString(cursor.getColumnIndexOrThrow("description")),
+                cursor.getString(cursor.getColumnIndexOrThrow("image_link")),
+                cursor.getInt(cursor.getColumnIndexOrThrow("genre_id"))
+        );
     }
 }
