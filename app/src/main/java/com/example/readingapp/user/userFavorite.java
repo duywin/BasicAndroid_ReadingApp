@@ -136,12 +136,12 @@ public class userFavorite extends AppCompatActivity {
                 }
             });
 
-            /*// Open book details
+            // Open book details
             holder.itemView.setOnClickListener(v -> {
                 Intent intent = new Intent(userFavorite.this, userChapter.class);
                 intent.putExtra("BOOK_ID", book.getId());
                 startActivity(intent);
-            });*/
+            });
         }
 
         @Override

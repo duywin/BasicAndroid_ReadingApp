@@ -173,12 +173,12 @@ public class userSearch extends AppCompatActivity {
                 }
             });
 
-           /* // Open book details
+            // Open book details
             holder.itemView.setOnClickListener(v -> {
                 Intent intent = new Intent(userSearch.this, userChapter.class);
                 intent.putExtra("BOOK_ID", book.getId());
                 startActivity(intent);
-            });*/
+            });
         }
 
         @Override

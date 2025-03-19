@@ -6,6 +6,7 @@ import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.StyleSpan;
 import android.util.Log;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -31,6 +32,8 @@ public class ChapterContent extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chapter_content);
 
+        TextView tvChapterName = findViewById(R.id.tv_chapter_name);
+        ImageButton btnBack = findViewById(R.id.btn_back);
         chapterContent = findViewById(R.id.chapter_content);
 
         String chapterName = getIntent().getStringExtra("CHAPTER_NAME");
@@ -38,6 +41,12 @@ public class ChapterContent extends AppCompatActivity {
 
         Log.d(TAG, "CHAPTER_NAME: " + chapterName);
         Log.d(TAG, "CHAPTER_LINK: " + filePath);
+
+        if (chapterName != null) {
+            tvChapterName.setText(chapterName);
+        }
+
+        btnBack.setOnClickListener(v -> onBackPressed());
 
         if (filePath == null || filePath.isEmpty()) {
             chapterContent.setText("Không tìm thấy nội dung chương.");
