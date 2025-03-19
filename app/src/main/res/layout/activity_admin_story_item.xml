@@ -3,7 +3,7 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:padding="8dp"
-    android:background="#F7F1E6"> <!-- Background Color -->
+    android:background="#FFF7E6"> <!-- Background Color -->
 
     <!-- Left Column: Story Image -->
     <ImageView
@@ -12,7 +12,7 @@
         android:layout_height="150dp"
         android:scaleType="centerCrop"
         android:layout_marginEnd="8dp"
-        android:background="@android:color/darker_gray"/>
+        android:background="#D4A373"/> <!-- Vintage Gold Placeholder -->
 
     <!-- Right Column: Story Details -->
     <LinearLayout
@@ -21,7 +21,6 @@
         android:layout_weight="1"
         android:orientation="vertical">
 
-
         <TextView
             android:id="@+id/story_title"
             android:layout_width="wrap_content"
@@ -29,7 +28,7 @@
             android:text="Title"
             android:textStyle="bold"
             android:textSize="16sp"
-            android:textColor="#6B4226"
+            android:textColor="#4E342E"
             android:paddingTop="4dp"/>
 
         <TextView
@@ -38,7 +37,7 @@
             android:layout_height="wrap_content"
             android:text="Author"
             android:textSize="14sp"
-            android:textColor="@android:color/black"
+            android:textColor="#6B4226"
             android:paddingTop="2dp"/>
 
         <TextView
@@ -49,7 +48,7 @@
             android:textSize="12sp"
             android:maxLines="3"
             android:ellipsize="end"
-            android:textColor="@android:color/black"
+            android:textColor="#6B4226"
             android:paddingTop="2dp"/>
 
         <!-- Bottom Row: Buttons (Edit & Delete side by side) -->
@@ -66,8 +65,8 @@
                 android:layout_height="wrap_content"
                 android:text="Sửa"
                 android:textAllCaps="false"
-                android:textColor="@android:color/white"
-                android:backgroundTint="#6B4226"
+                android:textColor="#FFF7E6"
+                android:backgroundTint="#8D5A2B"
                 android:elevation="4dp"
                 android:padding="8dp"
                 android:layout_marginEnd="8dp"/>
@@ -78,8 +77,8 @@
                 android:layout_height="wrap_content"
                 android:text="Xóa"
                 android:textAllCaps="false"
-                android:textColor="@android:color/white"
-                android:backgroundTint="#6B4226"
+                android:textColor="#FFF7E6"
+                android:backgroundTint="#B85042"
                 android:elevation="4dp"
                 android:padding="8dp"/>
         </LinearLayout>

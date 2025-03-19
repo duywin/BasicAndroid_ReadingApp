@@ -53,7 +53,8 @@ public class GenreAdapter extends RecyclerView.Adapter<GenreAdapter.GenreViewHol
     public void onBindViewHolder(@NonNull GenreViewHolder holder, int position) {
         Genre genre = genres.get(position);
         holder.btnGenre.setText(genre.getName());
-        holder.btnGenre.setBackgroundColor(colors[new Random().nextInt(colors.length)]);
+        int randomColor = colors[new Random().nextInt(colors.length)];
+        holder.btnGenre.setBackgroundTintList(android.content.res.ColorStateList.valueOf(randomColor));
         holder.btnGenre.setOnClickListener(v -> {
             Intent intent = new Intent(context, userSearch.class);
             intent.putExtra("genre_id", genre.getId());

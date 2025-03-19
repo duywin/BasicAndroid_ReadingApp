@@ -3,18 +3,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:background="#F7F1E6">
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:padding="8dp">
 
         <TextView
             android:id="@+id/chapter_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="16sp"
-            android:padding="8dp"/>
+            android:padding="12dp"
+            android:textColor="#4E342E"/>
+
     </ScrollView>
 
 </LinearLayout>

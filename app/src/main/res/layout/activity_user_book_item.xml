@@ -3,7 +3,7 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:padding="8dp"
-    android:background="#F7F1E6"> <!-- Background Color -->
+    android:background="#F7F1E6">
 
     <!-- Left Column: Story Image -->
     <ImageView
@@ -12,7 +12,7 @@
         android:layout_height="150dp"
         android:scaleType="centerCrop"
         android:layout_marginEnd="8dp"
-        android:background="@android:color/darker_gray"/>
+        android:background="#A67C52"/>
 
     <!-- Right Column: Story Details -->
     <LinearLayout
@@ -37,7 +37,7 @@
             android:layout_height="wrap_content"
             android:text="Author"
             android:textSize="14sp"
-            android:textColor="@android:color/black"
+            android:textColor="#4E342E"
             android:paddingTop="2dp"/>
 
         <TextView
@@ -48,7 +48,7 @@
             android:textSize="12sp"
             android:maxLines="3"
             android:ellipsize="end"
-            android:textColor="@android:color/black"
+            android:textColor="#4E342E"
             android:paddingTop="2dp"/>
 
         <!-- Bottom Row: Favorite Button -->

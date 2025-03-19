@@ -70,7 +70,9 @@
                     android:hint="Tìm kiếm sách..."
                     android:background="@android:drawable/edit_text"
                     android:padding="8dp"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1"
+                    android:textColor="#4E342E"
+                    android:textColorHint="#A67C52"/>
 
                 <!-- Search Button -->
                 <ImageView
@@ -100,7 +102,8 @@
                 android:padding="8dp"
                 android:clipToPadding="false"
                 android:overScrollMode="never"
-                android:layout_marginTop="8dp"/>
+                android:layout_marginTop="8dp"
+                android:background="#FFF7E6"/>
 
             <!-- Genre List -->
             <TextView
@@ -117,7 +120,8 @@
                 android:id="@+id/categoryList"
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
-                android:layout_marginTop="8dp"/>
+                android:layout_marginTop="8dp"
+                android:background="#FFF7E6"/>
         </LinearLayout>
     </ScrollView>
 

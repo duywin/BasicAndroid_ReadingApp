@@ -3,25 +3,30 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:background="#F7F1E6">
 
     <EditText
         android:id="@+id/chapter_name_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Enter Chapter Name"
+        android:hint="Nhập tên chương..."
         android:padding="10dp"
-        android:background="@android:color/darker_gray"/>
+        android:textColor="#4E342E"
+        android:textSize="16sp"
+        android:background="#FFF7E6" />
 
     <EditText
         android:id="@+id/chapter_content_input"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:hint="Write your chapter here..."
+        android:hint="Viết nội dung chương..."
         android:gravity="top"
         android:padding="10dp"
-        android:background="@android:color/white"
+        android:textColor="#4E342E"
+        android:textSize="16sp"
+        android:background="#FFFFFF"
         android:inputType="textMultiLine"/>
 
     <LinearLayout
@@ -34,13 +39,23 @@
             android:id="@+id/btn_bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Bold"/>
+            android:text="B"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="#FFF7E6"
+            android:backgroundTint="#6B4226"
+            android:padding="8dp"/>
 
         <Button
             android:id="@+id/btn_italic"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Italic"
+            android:text="I"
+            android:textSize="16sp"
+            android:textStyle="italic"
+            android:textColor="#FFF7E6"
+            android:backgroundTint="#8D5A2B"
+            android:padding="8dp"
             android:layout_marginStart="16dp"/>
     </LinearLayout>
 
@@ -48,6 +63,11 @@
         android:id="@+id/btn_save_chapter"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Save Chapter"
+        android:text="Lưu chương"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="#FFF7E6"
+        android:backgroundTint="#B85042"
+        android:padding="12dp"
         android:layout_marginTop="10dp"/>
 </LinearLayout>

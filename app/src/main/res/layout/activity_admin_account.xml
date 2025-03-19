@@ -45,7 +45,8 @@
             android:id="@+id/account_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:scrollbars="vertical" />
+            android:scrollbars="vertical"
+            android:background="#FFF7E6" />
     </androidx.core.widget.NestedScrollView>
 
     <!-- Bottom Navigation -->
