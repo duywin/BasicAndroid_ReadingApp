@@ -24,6 +24,13 @@ public class AccountDAO {
                     "type INTEGER NOT NULL);";
 
     private final SQLiteDatabase db;
+    public boolean updateAccountType(int accountId, int type) {
+        ContentValues values = new ContentValues();
+        values.put("type", type);
+
+        return db.update("Accounts", values, "id = ?", new String[]{String.valueOf(accountId)}) > 0;
+    }
+
 
     public AccountDAO(Context context) {
         this.db = new DatabaseHelper(context).getWritableDatabase();
@@ -47,7 +54,7 @@ public class AccountDAO {
         values.put("password", account.getPassword());
         values.put("dob", account.getDob());
         values.put("gender", account.isGender() ? 1 : 0);
-        values.put("type", account.getType());
+        values.put("type", account.getType()); //1 la thuong, 2 la vip, 3 la admin
 
         return db.insert(TABLE_NAME, null, values) != -1;
     }

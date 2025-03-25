@@ -21,7 +21,7 @@ import java.util.Iterator;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "ReadingApp.db";
-    private static final int DATABASE_VERSION = 3; // Keep version 3 or increase if needed
+    private static final int DATABASE_VERSION = 4;
     private final Context context;
 
     public DatabaseHelper(Context context) {
@@ -36,7 +36,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(BookDAO.CREATE_TABLE);
         db.execSQL(FavoriteDAO.CREATE_TABLE);
         db.execSQL(ChapterDAO.CREATE_TABLE);
-        db.execSQL(LogDAO.CREATE_TABLE);  // ✅ Add Logs table
+        db.execSQL(LogDAO.CREATE_TABLE);
+        db.execSQL(SubscriptionDAO.CREATE_TABLE);
 
         preloadData(db);
         Log.d("DatabaseHelper", "All tables created successfully!");
@@ -128,7 +129,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             db.execSQL("DROP TABLE IF EXISTS " + AccountDAO.TABLE_NAME);
             db.execSQL("DROP TABLE IF EXISTS " + FavoriteDAO.TABLE_NAME);
             db.execSQL("DROP TABLE IF EXISTS " + ChapterDAO.TABLE_NAME);
-            db.execSQL("DROP TABLE IF EXISTS " + LogDAO.TABLE_NAME); // ✅ Drop Logs table if exists
+            db.execSQL("DROP TABLE IF EXISTS " + LogDAO.TABLE_NAME);
+            db.execSQL("DROP TABLE IF EXISTS " + SubscriptionDAO.TABLE_NAME);
+
 
             onCreate(db); // ✅ Recreate database tables
         }

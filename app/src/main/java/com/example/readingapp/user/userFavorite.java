@@ -84,6 +84,7 @@ public class userFavorite extends AppCompatActivity {
                 case R.id.nav_user_favorite:
                     return true;
                 case R.id.nav_user_profile:
+                    startActivity(new Intent(userFavorite.this, userProfile.class));
                     return true;
             }
             return false;

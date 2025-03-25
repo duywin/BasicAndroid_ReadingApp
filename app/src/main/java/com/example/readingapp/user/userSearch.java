@@ -122,6 +122,7 @@ public class userSearch extends AppCompatActivity {
                     startActivity(new Intent(userSearch.this, userFavorite.class));
                     return true;
                 case R.id.nav_user_profile:
+                    startActivity(new Intent(userSearch.this, userProfile.class));
                     return true;
             }
             return false;

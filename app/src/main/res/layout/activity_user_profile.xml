@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#F7F1E6"
+    tools:context=".user.userProfile">
+
+    <!-- Scrollable Profile Container -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <!-- Profile Box -->
+            <LinearLayout
+                android:layout_width="340dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="#FFFFFF"
+                android:elevation="12dp"
+                android:padding="24dp"
+                android:layout_margin="20dp"
+                android:gravity="center">
+
+                <!-- Title -->
+                <TextView
+                    android:id="@+id/tvTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Hồ Sơ Cá Nhân"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:textColor="#4E342E"
+                    android:layout_gravity="center" />
+
+                <TextView
+                    android:id="@+id/tvVipStatus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="VIP"
+                    android:textSize="18sp"
+                    android:textColor="#D4A373"
+                    android:textStyle="bold"
+                    android:visibility="gone"
+                    android:layout_gravity="center"
+                    android:paddingTop="10dp"/>
+
+                <!-- Register VIP Button -->
+                <Button
+                    android:id="@+id/btnRegisterVip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Đăng ký thành viên"
+                    android:backgroundTint="#8D5A2B"
+                    android:textColor="#FFFFFF"
+                    android:padding="10dp"
+                    android:visibility="gone"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"/>
+
+                <!-- Username -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Tên đăng nhập"
+                    android:textSize="16sp"
+                    android:textColor="#4E342E"
+                    android:layout_marginTop="20dp" />
+
+                <TextView
+                    android:id="@+id/tvUsername"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:textColor="#6B4226" />
+
+                <EditText
+                    android:id="@+id/etUsername"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:visibility="gone"
+                    android:background="#FFF7E6"
+                    android:padding="12dp"
+                    android:textColor="#4E342E" />
+
+                <!-- Email -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Email"
+                    android:textSize="16sp"
+                    android:textColor="#4E342E"
+                    android:layout_marginTop="15dp" />
+
+                <TextView
+                    android:id="@+id/tvEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:textColor="#6B4226" />
+
+                <EditText
+                    android:id="@+id/etEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:visibility="gone"
+                    android:background="#FFF7E6"
+                    android:padding="12dp"
+                    android:textColor="#4E342E" />
+
+                <!-- Date of Birth -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Ngày sinh"
+                    android:textSize="16sp"
+                    android:textColor="#4E342E"
+                    android:layout_marginTop="15dp" />
+
+                <TextView
+                    android:id="@+id/tvDob"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:textColor="#6B4226" />
+
+                <EditText
+                    android:id="@+id/etDob"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:visibility="gone"
+                    android:background="#FFF7E6"
+                    android:padding="12dp"
+                    android:textColor="#4E342E"
+                    android:focusable="false"
+                    android:clickable="true" />
+
+                <!-- Gender Selection -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Giới tính"
+                    android:textSize="16sp"
+                    android:textColor="#4E342E"
+                    android:layout_marginTop="15dp" />
+
+                <TextView
+                    android:id="@+id/tvGender"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:textColor="#6B4226" />
+
+                <RadioGroup
+                    android:id="@+id/rgGender"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    android:orientation="horizontal"
+                    android:gravity="center">
+
+                    <RadioButton
+                        android:id="@+id/rbMale"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Nam"
+                        android:textColor="#4E342E" />
+
+                    <RadioButton
+                        android:id="@+id/rbFemale"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Nữ"
+                        android:textColor="#4E342E" />
+                </RadioGroup>
+
+                <!-- Buttons -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:layout_marginTop="20dp">
+
+                    <Button
+                        android:id="@+id/btnEdit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Chỉnh sửa"
+                        android:backgroundTint="#8D5A2B"
+                        android:textColor="#FFFFFF"
+                        android:padding="10dp"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="10dp" />
+
+                    <Button
+                        android:id="@+id/btnSave"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Lưu"
+                        android:backgroundTint="#A67C52"
+                        android:textColor="#FFFFFF"
+                        android:padding="10dp"
+                        android:visibility="gone"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="10dp" />
+
+                    <Button
+                        android:id="@+id/btnCancel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Hủy"
+                        android:backgroundTint="#B85042"
+                        android:textColor="#FFFFFF"
+                        android:padding="10dp"
+                        android:visibility="gone"
+                        android:layout_weight="1" />
+                </LinearLayout>
+
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- Bottom Navigation -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/user_bottom_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FFFFFF"
+        app:menu="@menu/user_bottom_menu"
+        app:labelVisibilityMode="labeled"
+        app:itemIconTint="@color/bottom_nav_background"
+        app:itemTextColor="@color/bottom_nav_background"
+        android:layout_gravity="bottom" />
+
+</LinearLayout>

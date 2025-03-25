@@ -99,6 +99,7 @@ public class userMain extends AppCompatActivity {
                     startActivity(new Intent(userMain.this, userFavorite.class));
                     return true;
                 case R.id.nav_user_profile:
+                    startActivity(new Intent(userMain.this, userProfile.class));
                     return true;
             }
             return false;
