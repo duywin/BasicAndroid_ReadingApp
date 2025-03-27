@@ -21,7 +21,7 @@ import java.util.Iterator;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "ReadingApp.db";
-    private static final int DATABASE_VERSION = 5;
+    private static final int DATABASE_VERSION = 6;
     private final Context context;
 
     public DatabaseHelper(Context context) {
@@ -61,6 +61,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             insertData(db, jsonObject.getJSONArray("books"), BookDAO.TABLE_NAME);
             insertData(db, jsonObject.getJSONArray("chapters"), ChapterDAO.TABLE_NAME);
             insertData(db, jsonObject.getJSONArray("favorites"), FavoriteDAO.TABLE_NAME);
+            insertData(db, jsonObject.getJSONArray("subscriptions"), SubscriptionDAO.TABLE_NAME);
+            insertData(db, jsonObject.getJSONArray("ratings"), RatingDAO.TABLE_NAME);
 
             db.setTransactionSuccessful();
             Log.d("DatabaseHelper", "Preloaded all data successfully.");
@@ -70,6 +72,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             db.endTransaction();
         }
     }
+
 
     private void insertData(SQLiteDatabase db, JSONArray dataArray, String tableName) throws JSONException {
         for (int i = 0; i < dataArray.length(); i++) {
@@ -133,8 +136,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             db.execSQL("DROP TABLE IF EXISTS " + LogDAO.TABLE_NAME);
             db.execSQL("DROP TABLE IF EXISTS " + SubscriptionDAO.TABLE_NAME);
             db.execSQL("DROP TABLE IF EXISTS " + RatingDAO.TABLE_NAME);
-
-
             onCreate(db);
         }
     }
