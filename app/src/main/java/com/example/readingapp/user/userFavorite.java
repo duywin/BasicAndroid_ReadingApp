@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,6 +21,7 @@ import com.bumptech.glide.Glide;
 import com.example.readingapp.LogIn;
 import com.example.readingapp.R;
 import com.example.readingapp.dao.FavoriteDAO;
+import com.example.readingapp.dao.RatingDAO;
 import com.example.readingapp.model.Book;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -30,11 +32,12 @@ import java.util.List;
 public class userFavorite extends AppCompatActivity {
 
     private RecyclerView recyclerView;
-    private List<Book> favoriteBooks;
+    private FavoriteBookAdapter adapter;
+    private List<Book> favoriteBooks = new ArrayList<>();
     private SharedPreferences sharedPreferences;
     private int accountId;
     private FavoriteDAO favoriteDAO;
-    private FavoriteBookAdapter adapter;
+    private RatingDAO ratingDAO;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +55,7 @@ public class userFavorite extends AppCompatActivity {
         }
 
         favoriteDAO = new FavoriteDAO(this);
+        ratingDAO = new RatingDAO(this);
 
         recyclerView = findViewById(R.id.story_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -74,18 +78,19 @@ public class userFavorite extends AppCompatActivity {
         bottomNavigationView.setSelectedItemId(R.id.nav_user_favorite);
 
         bottomNavigationView.setOnItemSelectedListener(item -> {
-            switch (item.getItemId()) {
-                case R.id.nav_user_main:
-                    startActivity(new Intent(userFavorite.this, userMain.class));
-                    return true;
-                case R.id.nav_user_search:
-                    startActivity(new Intent(userFavorite.this, userSearch.class));
-                    return true;
-                case R.id.nav_user_favorite:
-                    return true;
-                case R.id.nav_user_profile:
-                    startActivity(new Intent(userFavorite.this, userProfile.class));
-                    return true;
+            int id = item.getItemId();
+            if (id == R.id.nav_user_main) {
+                startActivity(new Intent(this, userMain.class));
+                finish();
+                return true;
+            } else if (id == R.id.nav_user_search) {
+                startActivity(new Intent(this, userSearch.class));
+                finish();
+                return true;
+            } else if (id == R.id.nav_user_profile) {
+                startActivity(new Intent(this, userProfile.class));
+                finish();
+                return true;
             }
             return false;
         });
@@ -112,30 +117,16 @@ public class userFavorite extends AppCompatActivity {
             holder.storyAuthor.setText("Tác giả: " + book.getAuthor());
             holder.storyDescription.setText(book.getDescription());
 
-            // Load book image
-            File internalImage = new File(getFilesDir(), "books/" + book.getImageLink());
-            if (internalImage.exists()) {
-                Glide.with(holder.storyImage.getContext()).load(internalImage).into(holder.storyImage);
-            } else {
-                String assetPath = "file:///android_asset/books/" + book.getImageLink();
-                Glide.with(holder.storyImage.getContext()).load(assetPath).into(holder.storyImage);
-            }
+            loadImage(holder.storyImage, book.getImageLink());
 
-            // Set favorite button state
-            boolean isFavorite = favoriteDAO.isBookFavorited(accountId, book.getId());
-            holder.favoriteButton.setImageResource(isFavorite ? R.drawable.favorite : R.drawable.unfavorite);
+            // Handle Favorite Toggle
+            updateFavoriteButton(holder.favoriteButton, book);
 
-            // Toggle favorite
-            holder.favoriteButton.setOnClickListener(v -> {
-                if (isFavorite) {
-                    favoriteDAO.removeFavorite(accountId, book.getId());
-                    books.remove(position);
-                    notifyItemRemoved(position);
-                } else {
-                    favoriteDAO.addFavorite(accountId, book.getId());
-                    holder.favoriteButton.setImageResource(R.drawable.favorite);
-                }
-            });
+            holder.favoriteButton.setOnClickListener(v -> toggleFavorite(holder, book, position));
+
+            // Load and display average rating
+            float avgRating = ratingDAO.getAverageRating(book.getId());
+            holder.storyRating.setRating(avgRating);
 
             // Open book details
             holder.itemView.setOnClickListener(v -> {
@@ -143,6 +134,25 @@ public class userFavorite extends AppCompatActivity {
                 intent.putExtra("BOOK_ID", book.getId());
                 startActivity(intent);
             });
+        }
+
+        private void toggleFavorite(FavoriteBookViewHolder holder, Book book, int position) {
+            boolean isFavorite = favoriteDAO.isBookFavorited(accountId, book.getId());
+
+            if (isFavorite) {
+                favoriteDAO.removeFavorite(accountId, book.getId());
+                books.remove(position);
+                notifyItemRemoved(position);
+                notifyItemRangeChanged(position, books.size());
+            } else {
+                favoriteDAO.addFavorite(accountId, book.getId());
+                holder.favoriteButton.setImageResource(R.drawable.favorite);
+            }
+        }
+
+        private void updateFavoriteButton(ImageButton button, Book book) {
+            boolean isFavorite = favoriteDAO.isBookFavorited(accountId, book.getId());
+            button.setImageResource(isFavorite ? R.drawable.favorite : R.drawable.unfavorite);
         }
 
         @Override
@@ -154,6 +164,7 @@ public class userFavorite extends AppCompatActivity {
             TextView storyTitle, storyAuthor, storyDescription;
             ImageView storyImage;
             ImageButton favoriteButton;
+            RatingBar storyRating;
 
             FavoriteBookViewHolder(View itemView) {
                 super(itemView);
@@ -162,7 +173,18 @@ public class userFavorite extends AppCompatActivity {
                 storyDescription = itemView.findViewById(R.id.story_description);
                 storyImage = itemView.findViewById(R.id.story_image);
                 favoriteButton = itemView.findViewById(R.id.favorite_button);
+                storyRating = itemView.findViewById(R.id.story_rating);
             }
+        }
+    }
+
+    private void loadImage(ImageView imageView, String imageLink) {
+        File internalImage = new File(getFilesDir(), "books/" + imageLink);
+        if (internalImage.exists()) {
+            Glide.with(this).load(internalImage).into(imageView);
+        } else {
+            String assetPath = "file:///android_asset/books/" + imageLink;
+            Glide.with(this).load(assetPath).into(imageView);
         }
     }
 }

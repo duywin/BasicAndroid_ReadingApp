@@ -3,12 +3,12 @@ package com.example.readingapp.user;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,13 +22,13 @@ import com.example.readingapp.LogIn;
 import com.example.readingapp.R;
 import com.example.readingapp.dao.BookDAO;
 import com.example.readingapp.dao.FavoriteDAO;
+import com.example.readingapp.dao.RatingDAO;
 import com.example.readingapp.model.Book;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 public class userSearch extends AppCompatActivity {
@@ -40,6 +40,7 @@ public class userSearch extends AppCompatActivity {
     private int accountId;
     private BookDAO bookDAO;
     private FavoriteDAO favoriteDAO;
+    private RatingDAO ratingDAO;
     private BookAdapter adapter;
     private boolean isAscending = true; // Sorting state
 
@@ -60,6 +61,7 @@ public class userSearch extends AppCompatActivity {
 
         bookDAO = new BookDAO(this);
         favoriteDAO = new FavoriteDAO(this);
+        ratingDAO = new RatingDAO(this);
 
         recyclerView = findViewById(R.id.story_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -159,6 +161,9 @@ public class userSearch extends AppCompatActivity {
                 Glide.with(holder.storyImage.getContext()).load(assetPath).into(holder.storyImage);
             }
 
+            float avgRating = ratingDAO.getAverageRating(book.getId());
+            holder.storyRating.setRating(avgRating);
+
             // Check if book is favorited
             boolean isFavorite = favoriteDAO.isBookFavorited(accountId, book.getId());
             holder.favoriteButton.setImageResource(isFavorite ? R.drawable.favorite : R.drawable.unfavorite);
@@ -190,13 +195,17 @@ public class userSearch extends AppCompatActivity {
         public class BookViewHolder extends RecyclerView.ViewHolder {
             TextView storyTitle, storyAuthor, storyDescription;
             ImageView storyImage;
+
             ImageButton favoriteButton;
+            RatingBar storyRating;
+
 
             BookViewHolder(View itemView) {
                 super(itemView);
                 storyTitle = itemView.findViewById(R.id.story_title);
                 storyAuthor = itemView.findViewById(R.id.story_author);
                 storyDescription = itemView.findViewById(R.id.story_description);
+                storyRating = itemView.findViewById(R.id.story_rating);
                 storyImage = itemView.findViewById(R.id.story_image);
                 favoriteButton = itemView.findViewById(R.id.favorite_button);
             }

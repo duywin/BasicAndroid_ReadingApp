@@ -9,7 +9,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingBottom="16dp">
 
         <!-- Row 1: Book Image with Back Button -->
         <RelativeLayout
@@ -45,7 +46,7 @@
             android:textSize="20sp"
             android:textStyle="bold"
             android:textColor="#4E342E"
-            android:paddingTop="8dp" />
+            android:paddingTop="12dp" />
 
         <TextView
             android:id="@+id/book_author"
@@ -66,12 +67,51 @@
             android:textColor="#A67C52"
             android:paddingTop="8dp" />
 
-        <!-- Row 4: RecyclerView for Chapters -->
+        <!-- Row 4: Rating Section -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="16dp">
+
+            <TextView
+                android:id="@+id/avg_rating_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Đánh giá trung bình: 0.0 ★"
+                android:textSize="16sp"
+                android:textColor="#4E342E"
+                android:textStyle="bold"
+                android:fontFamily="sans-serif" />
+
+            <RatingBar
+                android:id="@+id/rating_bar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:numStars="5"
+                android:stepSize="0.5"
+                android:rating="0"
+                android:progressTint="@color/gold"
+                android:progressBackgroundTint="@color/light_gray"
+                android:isIndicator="false"
+                android:layout_marginTop="4dp"/>
+
+            <Button
+                android:id="@+id/btn_submit_rating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Gửi đánh giá"
+                android:textColor="@color/white"
+                android:backgroundTint="@color/gold"
+                android:layout_marginTop="8dp"/>
+        </LinearLayout>
+
+        <!-- Row 5: RecyclerView for Chapters -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/chapter_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="16dp"
             android:nestedScrollingEnabled="false" />
     </LinearLayout>
 </ScrollView>

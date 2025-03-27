@@ -9,4 +9,6 @@
     <color name="white">#FFFFFFFF</color>
     <color name="bottom_nav_background">#6D4C41</color>
     <color name="bottom_nav_item_color">#FFFFFF</color>
+    <color name="gold">#FFD700</color>
+    <color name="light_gray">#D3D3D3</color>
 </resources>
